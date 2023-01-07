@@ -700,6 +700,10 @@ PrefabInstance:
       propertyPath: m_GravityScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6789367287515676379, guid: 2019146ce35c89e4ab15943733fd49f9, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6789367287515676381, guid: 2019146ce35c89e4ab15943733fd49f9, type: 3}
       propertyPath: m_Name
       value: Player
