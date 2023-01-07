@@ -30,6 +30,7 @@ public class BirdAIController : MonoBehaviour
     public BirdState birdState;
 
     private bool stateChanged;
+    private bool checkingIfStuck;
 
     void Start()
     {
@@ -43,16 +44,23 @@ public class BirdAIController : MonoBehaviour
 
     void Update()
     {
-        if (birdState == BirdState.Idle) return;
+        //Debug.Log(agent.reachedEndOfPath);
         CalculateBirdState();
+        //if (birdState == BirdState.Idle) return;
         CalculatePath();
+
+        if (birdState == BirdState.Flee && agent.velocity.magnitude <= 0.1f && !checkingIfStuck)
+        {
+            checkingIfStuck = true;
+            StartCoroutine(CheckIfStuck());
+        }
     }
 
     private void CalculateBirdState()
     {
-        BirdState newBirdState = InTriggerDistance() ? BirdState.Flee : BirdState.Wander;
-        stateChanged = newBirdState != birdState;
-        birdState = newBirdState;
+        birdState = InTriggerDistance() ? BirdState.Flee : BirdState.Idle;
+        //stateChanged = newBirdState != birdState;
+        //birdState = newBirdState;
     }
 
     private bool InTriggerDistance()
@@ -63,17 +71,18 @@ public class BirdAIController : MonoBehaviour
 
     private Path GetPath()
     {
-        RandomPath path;
+        RandomPath path = null;
         if (birdState == BirdState.Flee)
         {
-            path = FleePath.Construct(transform.position, target.position, fleePathDistance * 1000);
+            path = FleePath.Construct(transform.position, target.position, fleePathDistance * 500);
             path.aimStrength = 1;
-        } else
-        {
-            path = RandomPath.Construct(transform.position, (int)wanderRadius * 1000);
-            path.spread = 4000;
+        } 
+        //else
+        //{
+        //    path = RandomPath.Construct(transform.position, (int)wanderRadius * 1000);
+        //    path.spread = 4000;
 
-        }
+        //}
         return path;
     }
 
@@ -85,11 +94,24 @@ public class BirdAIController : MonoBehaviour
             stateChanged = false;
             Path path = GetPath();
             if (path == null) return;
-            agent.SetPath(path);
+            //agent.SetPath(path);
+            seeker.StartPath(path);
         }
 
     }
 
-    
+    private IEnumerator CheckIfStuck()
+    {
+        Vector3 position = transform.position;
+        yield return new WaitForSeconds(2);
+        Vector3 position1 = transform.position;
+        if (Vector3.Distance(position1, position) <= 0.1f)
+        {
+            Path path = GetPath();
+            if (path != null)
+                agent.SetPath(path);
+        }
+        checkingIfStuck = false;
+    }
 
 }
