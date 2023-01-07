@@ -19,13 +19,11 @@ public class BirdAIController : MonoBehaviour
     private IAstarAI agent;
 
     private Seeker seeker;
+    private Animator animator;
 
     // The radius around the enemy's starting position in which it will wander
     public int wanderRadius = 10;
     public int fleePathDistance = 5;
-
-    public float wanderWaitTime = 2f;
-    private float wanderTimer;
 
     public BirdState birdState;
 
@@ -37,8 +35,9 @@ public class BirdAIController : MonoBehaviour
         // Get the agent component
         agent = GetComponent<IAstarAI>();
         seeker = GetComponent<Seeker>();
+        animator = GetComponent<Animator>();
+
         agent.destination = transform.position;
-        wanderTimer = wanderWaitTime;
     }
 
 
@@ -54,6 +53,14 @@ public class BirdAIController : MonoBehaviour
             checkingIfStuck = true;
             StartCoroutine(CheckIfStuck());
         }
+        UpdateAnimations();
+    }
+
+    private void UpdateAnimations()
+    {
+        animator.SetFloat("Horizontal", agent.velocity.x);
+        animator.SetFloat("Vertical", agent.velocity.y);
+        animator.SetBool("isMoving", agent.velocity.magnitude >= 0.1f);
     }
 
     private void CalculateBirdState()

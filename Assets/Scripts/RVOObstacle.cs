@@ -12,5 +12,6 @@ public class RVOObstacle : MonoBehaviour
         PolygonCollider2D collider = GetComponent<PolygonCollider2D>();
         Vector3[] vert = collider.points.Select(x => (Vector3)x).ToArray();
         sim.AddObstacle(vert, 0);
+        
     }
 }
