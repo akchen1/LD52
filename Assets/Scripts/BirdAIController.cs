@@ -21,7 +21,11 @@ public class BirdAIController : MonoBehaviour
     private Seeker seeker;
 
     // The radius around the enemy's starting position in which it will wander
-    public float wanderRadius = 10f;
+    public int wanderRadius = 10;
+    public int fleePathDistance = 5;
+
+    public float wanderWaitTime = 2f;
+    private float wanderTimer;
 
     public BirdState birdState;
 
@@ -33,6 +37,7 @@ public class BirdAIController : MonoBehaviour
         agent = GetComponent<IAstarAI>();
         seeker = GetComponent<Seeker>();
         agent.destination = transform.position;
+        wanderTimer = wanderWaitTime;
     }
 
 
@@ -61,14 +66,14 @@ public class BirdAIController : MonoBehaviour
         RandomPath path;
         if (birdState == BirdState.Flee)
         {
-            path = FleePath.Construct(transform.position, target.position, 20);
+            path = FleePath.Construct(transform.position, target.position, fleePathDistance * 1000);
+            path.aimStrength = 1;
         } else
         {
-            path = RandomPath.Construct(transform.position, (int)wanderRadius);
+            path = RandomPath.Construct(transform.position, (int)wanderRadius * 1000);
+            path.spread = 4000;
 
         }
-        path.spread = 10000;
-        path.aimStrength = 1;
         return path;
     }
 
