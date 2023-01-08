@@ -86,7 +86,6 @@ public class PlayerLauncher : MonoBehaviour
                 child.transform.localScale = childScale;
 
             }
-            
         }
         Debug.DrawRay(transform.position, Vector3.up, Color.red);
         Debug.DrawRay(transform.position, normal, Color.blue);
@@ -244,7 +243,6 @@ public class PlayerLauncher : MonoBehaviour
         if (rb == null) return;
         currentPlatformOriginalRBType = rb.bodyType;
         rb.bodyType = type;
-
     }
 
     private GameObject CalculateNextPlatform(Vector2 direction)
