@@ -20,6 +20,9 @@ public class RopeSegment : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Destroy(this.gameObject);
-        rope.OnRopeCut(this);
+        if (collision.gameObject.tag != "Player") return;
+        PlayerLauncher player = collision.gameObject.GetComponent<PlayerLauncher>();
+        if (player.state == PlayerLauncher.PlayerState.InAir)
+            rope.OnRopeCut(this);
     }
 }

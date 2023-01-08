@@ -7,6 +7,7 @@ TagManager:
   - Wall
   - AreaManager
   - Swing
+  - InnerWall
   layers:
   - Default
   - TransparentFX
