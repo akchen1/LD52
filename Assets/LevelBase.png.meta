@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46333,10 +46333,10 @@ TextureImporter:
       LevelBase_1964: -1887777080
       LevelBase_491: -1791399675
       LevelBase_1886: 269713671
-      LevelBase_836: 1650905715
+      LevelBase_81: -731827809
       LevelBase_404: -377836220
       LevelBase_988: 936838791
-      LevelBase_81: -731827809
+      LevelBase_836: 1650905715
       LevelBase_610: -794126992
       LevelBase_442: -720608930
       LevelBase_1799: 1960520405
