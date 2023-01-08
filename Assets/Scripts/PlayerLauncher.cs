@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 public class PlayerLauncher : MonoBehaviour
 {
-    public enum PlayerState { InPlatform, InAir, Dead}
+    public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead}
     // The Rigidbody2D component of the Player object
     public Rigidbody2D PlayerRigidbody;
     //The strength the player is launched
@@ -26,11 +26,13 @@ public class PlayerLauncher : MonoBehaviour
     // Expected position where the player will end up after jumping
     private Vector3 expectedPosition;
 
+    [SerializeField] private GameObject child;
+
     private void Start() {
         AC = this.gameObject.GetComponent<AimController>();
         radius = AC.GetRadius();
         coll = GetComponent<Collider2D>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         state = PlayerState.InPlatform;
     }
 
@@ -43,40 +45,113 @@ public class PlayerLauncher : MonoBehaviour
         Move();
 
         SetAnimation();
+
+        RotateChild();
+    }
+
+    private void RotateChild()
+    {
+        if (state != PlayerState.InPlatform) return;
+        Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
+        float angle = Vector3.Angle(normal, Vector2.up);
+
+        Vector3 temp = Vector3.Cross(normal, Vector3.down);
+        Vector3 groundSlopeDirection = Vector3.Cross(temp, normal);
+        float groundSlopeAngle = Vector3.Angle(normal, Vector3.up);
+
+        //Debug.Log(groundSlopeDirection);
+
+        //child.transform.rotation = Quaternion.Euler(0, 0, angle);
+        Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
+        child.transform.rotation = rot;
+
+        Debug.Log(normal.y);
+
+        if (normal.y < 0) // on top
+        {
+            if (moveDir.magnitude != 0)
+            {
+                Vector3 childScale = child.transform.localScale;
+                childScale.x = moveDir.x < 0 ? -1 : 1;
+                child.transform.localScale = childScale;
+
+            }
+
+        } else if (normal.y > 0)
+        {
+            if (moveDir.magnitude != 0)
+            {
+                Vector3 childScale = child.transform.localScale;
+                childScale.x = moveDir.x < 0 ? 1 : -1;
+                child.transform.localScale = childScale;
+
+            }
+            
+        }
+        Debug.DrawRay(transform.position, Vector3.up, Color.red);
+        Debug.DrawRay(transform.position, normal, Color.blue);
     }
 
     private void SetAnimation()
     {
         animator.SetBool("isDead", state == PlayerState.Dead);
         animator.SetBool("inPlatform", state == PlayerState.InPlatform);
+        animator.SetBool("isLanding", state == PlayerState.Landing);
+        animator.SetBool("isTransition", state == PlayerState.LandingTransition);
     }
 
+    private Vector2 moveDir;
     private void Move()
     {
         if (state != PlayerState.InPlatform) return;
         Vector2 move = transform.position;
+        moveDir = Vector2.zero;
         if (Input.GetKey(KeyCode.A))
         {
-            move.x -= .1f;
+            moveDir.x -= .1f;
+            //if (child.transform.rotation.z >= 180)
+            //{
+            //    child.GetComponent<SpriteRenderer>().flipX = false;
+
+            //}
+            //else
+            //{
+
+            //child.GetComponent<SpriteRenderer>().flipX = true;
+            //}
+
         }
         if (Input.GetKey(KeyCode.D))
         {
-            move.x += .1f;
+            moveDir.x += .1f;
+            //if (child.transform.rotation.z >= 180)
+            //{
+            //    child.GetComponent<SpriteRenderer>().flipX = true;
 
+            //}
+            //else
+            //{
+
+            //    child.GetComponent<SpriteRenderer>().flipX = false;
+            //}
 
         }
         if (Input.GetKey(KeyCode.W))
         {
-            move.y += .1f;
+            moveDir.y += .1f;
 
         }
         if (Input.GetKey(KeyCode.S))
         {
-            move.y -= .1f;
+            moveDir.y -= .1f;
 
 
         }
+        move += moveDir;
         PlayerRigidbody.MovePosition(move);
+        animator.SetFloat("Horizontal", move.x);
+        animator.SetFloat("Vertical", move.y);
+        animator.SetBool("isMoving", move.magnitude > 0.1f);
     }
 
     private void Travel()
@@ -101,9 +176,20 @@ public class PlayerLauncher : MonoBehaviour
         }
         else
         {
-            state = PlayerState.InPlatform;
+            state = PlayerState.Landing;
             coll.isTrigger = false;
+            StartCoroutine(Land());
         }
+    }
+
+    private IEnumerator Land()
+    {
+        // wait for land animation 3 frames / 8 fps + transition animation 3 frames / 8 fps
+        yield return new WaitForSeconds(3f / 8f);
+        state = PlayerState.LandingTransition;
+        yield return new WaitForSeconds(3f / 8f);
+
+        state = PlayerState.InPlatform;
     }
 
     private void BeginJump()
@@ -137,6 +223,9 @@ public class PlayerLauncher : MonoBehaviour
         currentPlatform = platform;
 
         state = PlayerState.InAir;
+
+        Quaternion rot = Quaternion.FromToRotation(Vector3.up, mouseDirection);
+        child.transform.rotation = rot;
     }
 
     private Vector3 GetMouseWorldPosition()
