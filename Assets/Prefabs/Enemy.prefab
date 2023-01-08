@@ -202,6 +202,8 @@ MonoBehaviour:
   target: {fileID: 0}
   avoidanceDistance: 2
   triggerDistance: 2
+  Lantern: {fileID: 0}
+  SoulPrefab: {fileID: 5304839852398864294, guid: faa49b9bec6403848aa6714347e1265d, type: 3}
   wanderRadius: 2
   fleePathDistance: 4
   birdState: 1

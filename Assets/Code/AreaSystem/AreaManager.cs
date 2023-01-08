@@ -56,13 +56,13 @@ public class AreaManager : MonoBehaviour
 		currentArea = 0;
 	}
 
-	public bool AddSoulsToLantern(int amount)
+	public bool AddSoulToLantern()
 	{
 		// Check if area exists in dictionary
 		if (lanternsDict.ContainsKey(currentArea))
 		{
 			// Add souls and check if filled
-			if (lanternsDict[currentArea].AddSouls(amount))
+			if (lanternsDict[currentArea].AddSoul())
 			{
 				// Filled
 				ClearCurrentArea();
@@ -88,8 +88,8 @@ public class AreaManager : MonoBehaviour
 		}
 
 		// Enable new camera and disable old one
-		camerasDict[newArea].SetActive(true);
-		camerasDict[newArea].SetActive(false);
+		// camerasDict[newArea].SetActive(true);
+		// camerasDict[newArea].SetActive(false);
 
 		currentArea = newArea;
 	}
@@ -101,5 +101,8 @@ public class AreaManager : MonoBehaviour
 		{
 			coll.enabled = false;
 		}
+	}
+	public Lantern GetCrurrentLantern(){
+		return lanternsDict[currentArea];
 	}
 }

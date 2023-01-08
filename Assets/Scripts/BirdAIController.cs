@@ -14,6 +14,8 @@ public class BirdAIController : MonoBehaviour
 
     // The distance at which the enemy will start avoiding the target
     public float triggerDistance = 10f;
+    //Soul Prefab
+    public GameObject SoulPrefab;
 
     // The agent component used for pathfinding
     private IAstarAI agent;
@@ -58,6 +60,10 @@ public class BirdAIController : MonoBehaviour
         UpdateAnimations();
     }
 
+    private void OnMouseDown() {
+        Debug.Log(gameObject.name);
+        BirdDie();
+    }
     private void UpdateAnimations()
     {
         animator.SetFloat("Horizontal", agent.velocity.x);
@@ -133,7 +139,8 @@ public class BirdAIController : MonoBehaviour
     private IEnumerator DestroyBird()
     {
         // 4 frame / 8 frames/second
-        yield return new WaitForSeconds(4 / 8);
+        yield return new WaitForSeconds(4f / 8f);
+        Instantiate(SoulPrefab,transform.parent.parent).transform.position = transform.position;
         Destroy(this.gameObject);
     }
 
