@@ -7,26 +7,32 @@ public class AreaManager : MonoBehaviour
 	[SerializeField, Header("Area 1")] private List<Collider2D> a1Colliders;
 	[SerializeField] private Lantern a1Lantern;
 	[SerializeField] private GameObject a1Camera;
+	[SerializeField] private Transform a1Spawn;
 
 	[SerializeField, Header("Area 2")] private List<Collider2D> a2Colliders;
 	[SerializeField] private Lantern a2Lantern;
 	[SerializeField] private GameObject a2Camera;
+	[SerializeField] private Transform a2Spawn;
 
 	[SerializeField, Header("Area 3")] private List<Collider2D> a3Colliders;
 	[SerializeField] private Lantern a3Lantern;
 	[SerializeField] private GameObject a3Camera;
+	[SerializeField] private Transform a3Spawn;
 
 	[SerializeField, Header("Area 4")] private List<Collider2D> a4Colliders;
 	[SerializeField] private Lantern a4Lantern;
 	[SerializeField] private GameObject a4Camera;
+	[SerializeField] private Transform a4Spawn;
 
 	[SerializeField, Header("Area 5")] private List<Collider2D> a5Colliders;
 	[SerializeField] private Lantern a5Lantern;
 	[SerializeField] private GameObject a5Camera;
+	[SerializeField] private Transform a5Spawn;
 
 	private Dictionary<int, List<Collider2D>> collidersDict = new Dictionary<int, List<Collider2D>>();
 	private Dictionary<int, Lantern> lanternsDict = new Dictionary<int, Lantern>();
 	private Dictionary<int, GameObject> camerasDict = new Dictionary<int, GameObject>();
+	private Dictionary<int, Transform> spawnsDict = new Dictionary<int, Transform>();
 
 	private int currentArea;
 
@@ -52,6 +58,13 @@ public class AreaManager : MonoBehaviour
 		camerasDict.Add(3, a3Camera);
 		camerasDict.Add(4, a4Camera);
 		camerasDict.Add(5, a5Camera);
+
+		// Add spawns into dictionary
+		spawnsDict.Add(1, a1Spawn);
+		spawnsDict.Add(2, a2Spawn);
+		spawnsDict.Add(3, a3Spawn);
+		spawnsDict.Add(4, a4Spawn);
+		spawnsDict.Add(5, a5Spawn);
 
 		currentArea = 0;
 	}
@@ -102,7 +115,32 @@ public class AreaManager : MonoBehaviour
 			coll.enabled = false;
 		}
 	}
-	public Lantern GetCrurrentLantern(){
-		return lanternsDict[currentArea];
+
+	public Lantern? GetCurrentLantern()
+	{
+		// Check if area exists in dictionary
+		if (lanternsDict.ContainsKey(currentArea))
+		{
+			// Return lantern
+			return lanternsDict[currentArea];
+		}
+
+		// Log error
+		Debug.Log("Lantern not found in area " + currentArea);
+		return null;
+	}
+
+	public Vector3? GetCurrentSpawnPos()
+	{
+		// Check if area exists in dictionary
+		if (spawnsDict.ContainsKey(currentArea))
+		{
+			// Return lantern
+			return spawnsDict[currentArea].position;
+		}
+
+		// Log error
+		Debug.Log("Spawn position not found in area " + currentArea);
+		return null;
 	}
 }
