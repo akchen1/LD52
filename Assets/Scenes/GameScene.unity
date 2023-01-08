@@ -262,11 +262,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6789367287515676378, guid: 2019146ce35c89e4ab15943733fd49f9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.71
+      value: -5.38
       objectReference: {fileID: 0}
     - target: {fileID: 6789367287515676378, guid: 2019146ce35c89e4ab15943733fd49f9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.49
+      value: -18.87
       objectReference: {fileID: 0}
     - target: {fileID: 6789367287515676378, guid: 2019146ce35c89e4ab15943733fd49f9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1279,6 +1279,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1240228885 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6789367287515676381, guid: 2019146ce35c89e4ab15943733fd49f9, type: 3}
+  m_PrefabInstance: {fileID: 119486378}
+  m_PrefabAsset: {fileID: 0}
+--- !u!254 &1240228891
+RelativeJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240228885}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_MaxForce: 10000
+  m_MaxTorque: 10000
+  m_CorrectionScale: 0.3
+  m_AutoConfigureOffset: 1
+  m_LinearOffset: {x: 5.38, y: 18.87}
+  m_AngularOffset: 0
 --- !u!4 &1321913250 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 431594002725047735, guid: 4d44f52c23b029e46a4859953cd35a22, type: 3}
@@ -1393,7 +1417,7 @@ GameObject:
   - component: {fileID: 1554526075}
   m_Layer: 3
   m_Name: Square
-  m_TagString: GameController
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1818,6 +1842,10 @@ PrefabInstance:
     - target: {fileID: 3112058592388310664, guid: 57a910f93a4269347adbe831d01bb0cc, type: 3}
       propertyPath: m_Name
       value: HangingPlatform
+      objectReference: {fileID: 0}
+    - target: {fileID: 7106072912407617919, guid: 57a910f93a4269347adbe831d01bb0cc, type: 3}
+      propertyPath: m_TagString
+      value: Swing
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57a910f93a4269347adbe831d01bb0cc, type: 3}
