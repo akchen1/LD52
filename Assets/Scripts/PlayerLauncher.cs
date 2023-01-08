@@ -14,8 +14,6 @@ public class PlayerLauncher : MonoBehaviour
     private Animator animator;
     private float radius;
 
-    [SerializeField] private Transform childSprite;
-
     // Set to the current platform the player is on
     [SerializeField] private Platform currentPlatform;
 
