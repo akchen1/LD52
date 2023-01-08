@@ -8,24 +8,15 @@ public class PlayerLauncher : MonoBehaviour
     //The strength the player is launched
     public float launchForce;
 
-    //Aiming Objects
+    public float Speed;
 
     // Checking if the player is already in the air.
     private bool inAir = false;
 
     //Checking if the mouse is facing the oppisote direction of the object.
     private bool rightDireciton;
-    //Controller for AimController
-    private AimController AC;
-    private float radius;
+    private bool isMoving;
 
-    //InitalPosition of the Player
-    private Vector2 initalPosition;
-
-    private void Start() {
-        AC = this.gameObject.GetComponent<AimController>();
-        radius = AC.GetRadius();
-    }
 
     private void Update() {
         
@@ -44,33 +35,25 @@ public class PlayerLauncher : MonoBehaviour
 
             // Normalize the direction and scale it by the launch force
             mouseDirection = mouseDirection.normalized; 
-            Vector2 launchVelocity = mouseDirection * launchForce;
+            float chargedPower = gameObject.GetComponent<AimController>().GetPowerScale() * launchForce;
+            Vector2 launchVelocity = mouseDirection * chargedPower;
 
-            initalPosition = transform.position;
-            
-            // Apply the launch force to the Player
-            //StartCoroutine(Launch(launchVelocity));
-            //PlayerRigidbody.AddForce(launchVelocity, ForceMode2D.Impulse);
+            PlayerRigidbody.AddForce(launchVelocity, ForceMode2D.Impulse);
         }
-        //if(inAir)
-        //{
-        //    float distanceTraveled = Mathf.Sqrt(Mathf.Pow(transform.position.x - initalPosition.x, 2) + Mathf.Pow(transform.position.y - initalPosition.y, 2));  
-        //    if(distanceTraveled > radius){
-        //        Debug.Log("DEAD");
-        //        inAir = false;
-        //        PlayerRigidbody.velocity = Vector3.zero;
-        //        PlayerRigidbody.angularVelocity = 0;
-        //    }
-
-        //}
-
-        //if (relativeJoint.enabled)
-        //{
-        //    GameObject connectedBody = relativeJoint.connectedBody.gameObject;
-        //    float distance = (connectedBody.transform.position - transform.position).magnitude;
-        //    relativeJoint.distance = distance;
-        //}
-
+        if(Input.GetKeyDown(KeyCode.A) && !inAir){
+            PlayerRigidbody.velocity = Vector2.left * Speed;
+            isMoving = true;
+        }
+        if(Input.GetKeyDown(KeyCode.D) && !inAir){
+            PlayerRigidbody.velocity = Vector2.right * Speed;
+            isMoving = true;
+        }
+        if((Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D)) && !inAir){
+            PlayerRigidbody.velocity = Vector3.zero;
+            PlayerRigidbody.angularVelocity = 0;
+            isMoving = false;
+        }
+        
     }
 
 
@@ -78,7 +61,6 @@ public class PlayerLauncher : MonoBehaviour
     {
         // Get the position of the mouse in world coordinates
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
         // Calculate the angle between the mouse and the object
         float angle = Vector2.Angle(mouseWorldPosition - transform.position, collision.contacts[0].normal);
         // Check if the angle is within the desired range
@@ -90,17 +72,19 @@ public class PlayerLauncher : MonoBehaviour
         {
             rightDireciton = false;
         }
+        if(!inAir && !isMoving)
+        {
+            PlayerRigidbody.velocity = Vector3.zero;
+            PlayerRigidbody.angularVelocity = 0;
+        }
 
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Wall")
+        if (collision.gameObject.tag == "Floor" && inAir)
         {
-           inAir = false;
-           PlayerRigidbody.velocity = Vector3.zero;
-           PlayerRigidbody.angularVelocity = 0;
-           PlayerRigidbody.gravityScale = 0;
+            inAir = false;
         }
     }
 }
