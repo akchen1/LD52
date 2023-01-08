@@ -38,6 +38,8 @@ public class BirdAIController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         agent.destination = transform.position;
+        animator.SetBool("isDead", false);
+
     }
 
 
@@ -119,6 +121,20 @@ public class BirdAIController : MonoBehaviour
                 agent.SetPath(path);
         }
         checkingIfStuck = false;
+    }
+
+
+    public void BirdDie()
+    {
+        animator.SetBool("isDead", true);
+        StartCoroutine(DestroyBird());
+    }
+
+    private IEnumerator DestroyBird()
+    {
+        // 4 frame / 8 frames/second
+        yield return new WaitForSeconds(4 / 8);
+        Destroy(this.gameObject);
     }
 
 }
