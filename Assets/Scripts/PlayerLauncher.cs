@@ -1,145 +1,178 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Linq;
 public class PlayerLauncher : MonoBehaviour
 {
+    public enum PlayerState { InPlatform, InAir, Dead}
     // The Rigidbody2D component of the Player object
     public Rigidbody2D PlayerRigidbody;
     //The strength the player is launched
-    public float launchForce;
 
-    //Aiming Objects
-
-    // Checking if the player is already in the air.
-    private bool inAir = false;
-
-    //Checking if the mouse is facing the oppisote direction of the object.
-    private bool rightDireciton;
     //Controller for AimController
     private AimController AC;
+    private Collider2D coll;
+    private Animator animator;
     private float radius;
 
-    //InitalPosition of the Player
-    private Vector2 initalPosition;
-
-    private DistanceJoint2D relativeJoint;
-    private Collision2D currentGround;
     [SerializeField] private Transform childSprite;
+
+    // Set to the current platform the player is on
+    [SerializeField] private Platform currentPlatform;
+
+    // State of the player
+    public PlayerState state;
+
+    // Used for rope platform. keep track of original Rigidbody type
+    private RigidbodyType2D currentPlatformOriginalRBType;
+
+    // Expected position where the player will end up after jumping
+    private Vector3 expectedPosition;
+
     private void Start() {
         AC = this.gameObject.GetComponent<AimController>();
         radius = AC.GetRadius();
-        relativeJoint = GetComponent<DistanceJoint2D>();
+        coll = GetComponent<Collider2D>();
+        animator = GetComponent<Animator>();
+        state = PlayerState.InPlatform;
     }
 
     private void Update() {
-        
-        if (Input.GetMouseButtonUp(0) && inAir == false && rightDireciton)
-        {
-            inAir = true;
-            // Get the position of the mouse click
-            Vector3 mousePos = Input.mousePosition;
+        if (state == PlayerState.Dead) return;
+        BeginJump();
 
-            // Convert the mouse position to world space
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        Travel();
 
-            // Calculate the direction and distance from the Player to the mouse click
-            Vector2 mouseDirection = worldPos - transform.position;
-            float distance = mouseDirection.magnitude;
+        Move();
 
-            // Normalize the direction and scale it by the launch force
-            mouseDirection = mouseDirection.normalized; 
-            Vector2 launchVelocity = mouseDirection * launchForce;
+        SetAnimation();
+    }
 
-            initalPosition = transform.position;
-            
-            if (relativeJoint.enabled)
-            {
-                relativeJoint.connectedBody = null;
-                relativeJoint.enabled = false;
-            }
-            // Apply the launch force to the Player
-            //StartCoroutine(Launch(launchVelocity));
-            //PlayerRigidbody.AddForce(launchVelocity, ForceMode2D.Impulse);
-        }
-        //if(inAir)
-        //{
-        //    float distanceTraveled = Mathf.Sqrt(Mathf.Pow(transform.position.x - initalPosition.x, 2) + Mathf.Pow(transform.position.y - initalPosition.y, 2));  
-        //    if(distanceTraveled > radius){
-        //        Debug.Log("DEAD");
-        //        inAir = false;
-        //        PlayerRigidbody.velocity = Vector3.zero;
-        //        PlayerRigidbody.angularVelocity = 0;
-        //    }
+    private void SetAnimation()
+    {
+        animator.SetBool("isDead", state == PlayerState.Dead);
+        animator.SetBool("inPlatform", state == PlayerState.InPlatform);
+    }
 
-        //}
-
-        //if (relativeJoint.enabled)
-        //{
-        //    GameObject connectedBody = relativeJoint.connectedBody.gameObject;
-        //    float distance = (connectedBody.transform.position - transform.position).magnitude;
-        //    relativeJoint.distance = distance;
-        //}
-
+    private void Move()
+    {
+        if (state != PlayerState.InPlatform) return;
+        Vector2 move = transform.position;
         if (Input.GetKey(KeyCode.A))
         {
-            Move(-1);
+            move.x -= .1f;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            Move(1);
+            move.x += .1f;
+
 
         }
-    }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        //Debug.DrawLine(transform.position, collision.collider.bounds.center, Color.cyan);
-        offset = collision.GetContact(0).point - (Vector2)transform.position;
-    }
-
-    Vector2 offset;
-    private Vector2 AlignWithGround()
-    {
-        if (currentGround == null) return Vector2.zero;
-        Vector3 direction = transform.position - currentGround.collider.bounds.center;
-        transform.up = direction;
-        
-        RaycastHit2D ground = Physics2D.Raycast(transform.position, -direction, direction.magnitude, 1<<3);
-        if (ground.collider != null)
+        if (Input.GetKey(KeyCode.W))
         {
-            Debug.Log(ground.point);
-            return ground.point;
-            //transform.position = ground.point - offset;
+            move.y += .1f;
+
         }
-        Debug.DrawRay(transform.position, -direction, Color.blue);
-        return Vector2.zero;
-        //Debug.DrawRay(transform.position, -transform.up, Color.red);
+        if (Input.GetKey(KeyCode.S))
+        {
+            move.y -= .1f;
+
+
+        }
+        PlayerRigidbody.MovePosition(move);
     }
 
-    private void Move(int dir)
+    private void Travel()
     {
-        Vector2 groundPosition = AlignWithGround();
-        //childSprite.position = groundPosition;
-        //transform.position = (Vector3)transform.position + (transform.right * dir * Time.deltaTime);
+        if (state != PlayerState.InAir) return;
+
+        if (Vector2.Distance(expectedPosition, transform.position) >= 0.1f)
+        {
+            Vector2 direction = expectedPosition - transform.position;
+            PlayerRigidbody.velocity = direction.normalized * 10f;
+            return;
+        }
+
+        PlayerRigidbody.velocity = Vector2.zero;
+        if (currentPlatform == null)
+        {
+            // Insert dead function
+            Debug.Log("DEAD");
+            state = PlayerState.Dead;
+            PlayerRigidbody.velocity = Vector3.zero;
+            PlayerRigidbody.angularVelocity = 0;
+        }
+        else
+        {
+            state = PlayerState.InPlatform;
+            coll.isTrigger = false;
+        }
+    }
+
+    private void BeginJump()
+    {
+        if (state != PlayerState.InPlatform) return;
+        if (!(Input.GetMouseButtonUp(0))) return;
+
+
+        Vector3 worldPos = GetMouseWorldPosition();
+
+        // Calculate the direction and distance from the Player to the mouse click
+        Vector2 mouseDirection = worldPos - transform.position;
+        float distance = mouseDirection.magnitude;
+
+        // Normalize the direction and scale it by the launch force
+        mouseDirection = mouseDirection.normalized;
+        
+
+        GameObject nextPlatform = CalculateNextPlatform(mouseDirection);
+        if (nextPlatform != null && nextPlatform.tag == "InnerWall")
+        {
+            return;
+        }
+        // Set player to trigger, Ignore all collision
+        coll.isTrigger = true;
+        SetRigidBodyType(currentPlatform, currentPlatformOriginalRBType);
+
+        Platform platform = nextPlatform?.GetComponent<Platform>();
+        SetRigidBodyType(platform, RigidbodyType2D.Static);
+
+        currentPlatform = platform;
+
+        state = PlayerState.InAir;
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        // Get the position of the mouse click
+        Vector3 mousePos = Input.mousePosition;
+
+        // Convert the mouse position to world space
+        return Camera.main.ScreenToWorldPoint(mousePos);
+    }
+
+    private void SetRigidBodyType(Platform platform, RigidbodyType2D type)
+    {
+        if (platform == null) return;
+        Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();
+        if (rb == null) return;
+        currentPlatformOriginalRBType = rb.bodyType;
+        rb.bodyType = type;
 
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private GameObject CalculateNextPlatform(Vector2 direction)
     {
-        currentGround = collision;
-        //if (collision.gameObject.tag == "Wall")
-        //{
-        //    inAir = false;
-        //    PlayerRigidbody.velocity = Vector3.zero;
-        //    PlayerRigidbody.angularVelocity = 0;
-        //    PlayerRigidbody.gravityScale = 0;
-        //} else if (collision.gameObject.tag == "Swing")
-        //{
-        //    inAir = false;
-        //    relativeJoint.enabled = true;
-        //    relativeJoint.connectedBody = collision.gameObject.GetComponent<Rigidbody2D>();
-        //    PlayerRigidbody.velocity = Vector3.zero;
-        //}
+        // Calculated expected position
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, radius, 1 << 3);
+        hits = hits.Where(x => x.collider.gameObject != currentPlatform.gameObject).OrderBy(x => Vector3.Distance(transform.position, x.point)).ToArray();
+
+        if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
+        {
+            expectedPosition = hits[0].point + direction * 0.15f;
+            return hits[0].collider.gameObject;
+        }
+        expectedPosition = (Vector2)transform.position + direction * radius;
+        return null;
     }
 }
 
