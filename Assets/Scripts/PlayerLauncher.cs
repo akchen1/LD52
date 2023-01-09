@@ -65,6 +65,7 @@ public class PlayerLauncher : MonoBehaviour
         Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
         child.transform.rotation = rot;
 
+		Debug.Log(normal);
         if (normal.y < 0) // on top
         {
             if (moveDir.magnitude != 0)
@@ -79,6 +80,7 @@ public class PlayerLauncher : MonoBehaviour
         {
             if (moveDir.magnitude != 0)
             {
+				//Debug.Log(moveDir);
                 Vector3 childScale = child.transform.localScale;
                 if (moveDir.y == 0) // im not pressing up or down
                 {
@@ -86,9 +88,12 @@ public class PlayerLauncher : MonoBehaviour
 
                 } else if (moveDir.x == 0)// im not presssing left or right
                 {
-                    childScale.x = moveDir.y < 0 ? 1 : -1;
-                }
-                else// I am pressing both
+					if (normal.x < 0)
+						childScale.x = moveDir.y < 0 ? 1 : -1;
+					else
+						childScale.x = moveDir.y < 0 ? -1 : 1;
+				}
+				else// I am pressing both
                 {
                     childScale.x = moveDir.x < 0 ? 1 : -1;
                 }
