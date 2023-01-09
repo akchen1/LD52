@@ -54,10 +54,10 @@ MonoBehaviour:
   level4Theme: {fileID: 0}
   level5Theme: {fileID: 0}
   foxDash: {fileID: 0}
-  foxDeath: {fileID: 0}
+  foxDeath: {fileID: 8300000, guid: 03d53bd3ee1b69042b9c4bdedaca9f42, type: 3}
   birdDeath: {fileID: 0}
   lanternCollect: {fileID: 0}
-  lanternCompleted: {fileID: 0}
+  lanternCompleted: {fileID: 8300000, guid: 551c1de5f772d8942a5ed75e32ec1d68, type: 3}
   waterRockSplash: {fileID: 0}
   waterFoxSplash: {fileID: 0}
 --- !u!82 &8609705006498609411

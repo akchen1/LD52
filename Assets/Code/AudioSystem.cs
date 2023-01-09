@@ -10,11 +10,12 @@ public class AudioSystem : MonoBehaviour
 	public AudioSource SfxSource;
 	public AudioSource MusicSource;
 
-	[Header("Music"), SerializeField] private AudioClip level1Theme;
-	[SerializeField] private AudioClip level2Theme;
-	[SerializeField] private AudioClip level3Theme;
-	[SerializeField] private AudioClip level4Theme;
-	[SerializeField] private AudioClip level5Theme;
+	[Header("Music"), SerializeField] private AudioClip themeA;
+	[SerializeField] private AudioClip themeB;
+	[SerializeField] private AudioClip themeC;
+	[SerializeField] private AudioClip themeD;
+	[SerializeField] private AudioClip themeDIntro;
+	[SerializeField] private AudioClip themeE;
 
 	[Header("SFX"), SerializeField] private AudioClip foxDash;
 	[SerializeField] private AudioClip foxDeath;
@@ -23,6 +24,8 @@ public class AudioSystem : MonoBehaviour
 	[SerializeField] private AudioClip lanternCompleted;
 	[SerializeField] private AudioClip waterRockSplash;
 	[SerializeField] private AudioClip waterFoxSplash;
+
+	[Header("General"), SerializeField] private float fadeTime;
 
 	private Dictionary<string, AudioClip> music = new Dictionary<string, AudioClip>();
 	private Dictionary<string, AudioClip> sfx = new Dictionary<string, AudioClip>();
@@ -39,11 +42,12 @@ public class AudioSystem : MonoBehaviour
 		}
 
 		// Add music to music dictionary
-		music.Add("level1Theme", level1Theme);
-		music.Add("level2Theme", level2Theme);
-		music.Add("level3Theme", level3Theme);
-		music.Add("level4Theme", level4Theme);
-		music.Add("level5Theme", level5Theme);
+		music.Add("ThemeA", themeA);
+		music.Add("ThemeB", themeB);
+		music.Add("ThemeC", themeC);
+		music.Add("ThemeD", themeD);
+		music.Add("ThemeDIntro", themeDIntro);
+		music.Add("ThemeE", themeE);
 
 		/// Add sfx to sfx dictionary
 		sfx.Add("FoxDash", foxDash);
@@ -77,5 +81,53 @@ public class AudioSystem : MonoBehaviour
 			MusicSource.clip = music[name];
 			MusicSource.Play();
 		}
+	}
+
+	private IEnumerator ChangeMusic(string name)
+	{
+		float elapsedTime = 0f;
+		float normalizedTime = 0f;
+
+		while (elapsedTime < fadeTime)
+		{
+			elapsedTime += Time.deltaTime;
+			normalizedTime = elapsedTime / fadeTime;
+
+			MusicSource.volume = 1 - normalizedTime;
+
+			yield return null;
+		}
+
+		PlayMusic(name);
+
+		elapsedTime = 0f;
+		normalizedTime = 0f;
+		while (elapsedTime < fadeTime)
+		{
+			elapsedTime += Time.deltaTime;
+			normalizedTime = elapsedTime / fadeTime;
+
+			MusicSource.volume = normalizedTime;
+
+			yield return null;
+		}
+	}
+
+	public void PlayThemeD()
+	{
+		MusicSource.clip = music["ThemeDIntro"];
+		MusicSource.Play();
+		MusicSource.loop = false;
+
+		StartCoroutine(PlayThemeDLoop());
+	}
+
+	private IEnumerator PlayThemeDLoop()
+	{
+		yield return new WaitForSeconds(music["ThemeDIntro"].length);
+
+		MusicSource.clip = music["ThemeD"];
+		MusicSource.loop = true;
+		MusicSource.Play();
 	}
 }
