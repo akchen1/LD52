@@ -8,31 +8,37 @@ public class AreaManager : MonoBehaviour
 	[SerializeField] private Lantern a1Lantern;
 	[SerializeField] private GameObject a1Camera;
 	[SerializeField] private Transform a1Spawn;
+	[SerializeField] private Parallax a1Background;
 
 	[SerializeField, Header("Area 2")] private List<Collider2D> a2Colliders;
 	[SerializeField] private Lantern a2Lantern;
 	[SerializeField] private GameObject a2Camera;
 	[SerializeField] private Transform a2Spawn;
+	[SerializeField] private Parallax a2Background;
 
 	[SerializeField, Header("Area 3")] private List<Collider2D> a3Colliders;
 	[SerializeField] private Lantern a3Lantern;
 	[SerializeField] private GameObject a3Camera;
 	[SerializeField] private Transform a3Spawn;
+	[SerializeField] private Parallax a3Background;
 
 	[SerializeField, Header("Area 4")] private List<Collider2D> a4Colliders;
 	[SerializeField] private Lantern a4Lantern;
 	[SerializeField] private GameObject a4Camera;
 	[SerializeField] private Transform a4Spawn;
+	[SerializeField] private Parallax a4Background;
 
 	[SerializeField, Header("Area 5")] private List<Collider2D> a5Colliders;
 	[SerializeField] private Lantern a5Lantern;
 	[SerializeField] private GameObject a5Camera;
 	[SerializeField] private Transform a5Spawn;
+	[SerializeField] private Parallax a5Background;
 
 	private Dictionary<int, List<Collider2D>> collidersDict = new Dictionary<int, List<Collider2D>>();
 	private Dictionary<int, Lantern> lanternsDict = new Dictionary<int, Lantern>();
 	private Dictionary<int, GameObject> camerasDict = new Dictionary<int, GameObject>();
 	private Dictionary<int, Transform> spawnsDict = new Dictionary<int, Transform>();
+	private Dictionary<int, Parallax> backgroundDict = new Dictionary<int, Parallax>();
 
 	private int currentArea;
 
@@ -65,6 +71,13 @@ public class AreaManager : MonoBehaviour
 		spawnsDict.Add(3, a3Spawn);
 		spawnsDict.Add(4, a4Spawn);
 		spawnsDict.Add(5, a5Spawn);
+
+		// Add backgrounds to dictionary
+		backgroundDict.Add(1, a1Background);
+		backgroundDict.Add(2, a2Background);
+		backgroundDict.Add(3, a3Background);
+		backgroundDict.Add(4, a4Background);
+		backgroundDict.Add(5, a5Background);
 
 		currentArea = 1;
 	}
@@ -103,8 +116,11 @@ public class AreaManager : MonoBehaviour
 		camerasDict[newArea].SetActive(true);
 		camerasDict[currentArea].SetActive(false);
 
+		backgroundDict[currentArea].DeactivateParallax(currentArea);
+		backgroundDict[newArea].EnableParallax(newArea);
 		currentArea = newArea;
-	}
+
+    }
 
 	public void ClearCurrentArea()
 	{
@@ -143,4 +159,8 @@ public class AreaManager : MonoBehaviour
 		return null;
 	}
 
+	public int GetCurrentArea()
+    {
+		return currentArea;
+    }
 }

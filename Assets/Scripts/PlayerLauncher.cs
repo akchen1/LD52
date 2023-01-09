@@ -70,6 +70,7 @@ public class PlayerLauncher : MonoBehaviour
 
         if (normal.y < 0) // on top
         {
+            Debug.Log("On top");
             if (moveDir.magnitude != 0)
             {
                 Vector3 childScale = child.transform.localScale;
@@ -80,10 +81,26 @@ public class PlayerLauncher : MonoBehaviour
 
         } else if (normal.y > 0)
         {
+            Debug.Log("On Bottom");
+
             if (moveDir.magnitude != 0)
             {
                 Vector3 childScale = child.transform.localScale;
-                childScale.x = moveDir.x < 0 ? 1 : -1;
+                if (moveDir.y == 0) // im not pressing up or down
+                {
+                    childScale.x = moveDir.x < 0 ? 1 : -1;
+
+                } else if (moveDir.x == 0)// im not presssing left or right
+                {
+                    childScale.x = moveDir.y < 0 ? 1 : -1;
+                }
+                else// I am pressing both
+                {
+                    childScale.x = moveDir.x < 0 ? 1 : -1;
+                }
+
+                Debug.Log(moveDir);
+                //childScale.x = moveDir.x < 0 && moveDir.y < 0 ? 1 : -1;
                 child.transform.localScale = childScale;
 
             }
@@ -166,13 +183,13 @@ public class PlayerLauncher : MonoBehaviour
         PlayerRigidbody.velocity = Vector2.zero;
         if (currentPlatform == null)
         {
-            //Death Animation
-            child.transform.rotation = Quaternion.identity;
-            state = PlayerState.Dead;
-            PlayerRigidbody.velocity = Vector3.zero;
-            PlayerRigidbody.angularVelocity = 0;
+            ////Death Animation
+            //child.transform.rotation = Quaternion.identity;
+            //state = PlayerState.Dead;
+            //PlayerRigidbody.velocity = Vector3.zero;
+            //PlayerRigidbody.angularVelocity = 0;
 
-            StartCoroutine(PlayerRespawn());
+            //StartCoroutine(PlayerRespawn());
             
         }
         else
