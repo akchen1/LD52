@@ -23,8 +23,10 @@ public class PolygonColliderToEdgeColliderEditor : EditorWindow
 
 			// Create a new game object for the outer collider
 			GameObject outerObject = new GameObject("Platform");
+
 			outerObject.AddComponent<Platform>();
 			outerObject.transform.position = gameObject.transform.position;
+			outerObject.transform.SetParent(gameObject.transform.parent);
 			gameObject.transform.SetParent(outerObject.transform);
 			outerObject.tag = "Wall";
 			outerObject.layer = 3;
