@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7598735625527066999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7598735625527066992}
+  - component: {fileID: 7598735625527066993}
+  - component: {fileID: 7598735625527066998}
+  m_Layer: 3
+  m_Name: Platform 6
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7598735625527066992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598735625527066999}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.534023, y: 12.091682, z: -9.833994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7598735625757429789}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7598735625527066993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598735625527066999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2156e90bb8785594b909cbf4262b8636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outerCollider: {fileID: 7598735625527066998}
+  innerCollider: {fileID: 7598735625757429762}
+--- !u!68 &7598735625527066998
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598735625527066999}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 1.6910193, y: -1.2156808}
+  - {x: 1.338254, y: -1.2154833}
+  - {x: 0.94027424, y: -1.2097836}
+  - {x: 0.2747593, y: -1.1876249}
+  - {x: -2.8872895, y: -1.0684335}
+  - {x: -4.437256, y: -0.94548035}
+  - {x: -5.098483, y: -0.95512676}
+  - {x: -5.519884, y: -1.0337155}
+  - {x: -9.946007, y: -1.9538383}
+  - {x: -10.458219, y: -2.0732336}
+  - {x: -10.9919405, y: -2.2049737}
+  - {x: -11.615651, y: -2.3533945}
+  - {x: -14.750191, y: -3.221283}
+  - {x: -14.722324, y: -3.3730671}
+  - {x: -2.9747577, y: -3.3570974}
+  - {x: 9.804048, y: -3.352291}
+  - {x: 9.935276, y: -3.2143526}
+  - {x: 9.068795, y: -2.9268796}
+  - {x: 8.70816, y: -2.8070335}
+  - {x: 8.245372, y: -2.5768445}
+  - {x: 7.9448624, y: -2.4097548}
+  - {x: 7.5592117, y: -2.256503}
+  - {x: 6.6072464, y: -2.0431547}
+  - {x: 5.0479527, y: -1.6979189}
+  - {x: 4.3409977, y: -1.5060301}
+  - {x: 3.5683422, y: -1.3139477}
+  - {x: 3.1638381, y: -1.2431865}
+  - {x: 2.6034756, y: -1.1698189}
+  - {x: 2.1648574, y: -1.2104636}
+  - {x: 1.6818202, y: -1.2202013}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
+--- !u!1 &7598735625757429763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7598735625757429789}
+  - component: {fileID: 7598735625757429762}
+  m_Layer: 3
+  m_Name: InnerBoundry
+  m_TagString: InnerWall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7598735625757429789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598735625757429763}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7598735625527066992}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!68 &7598735625757429762
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598735625757429763}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 1.9850273, y: -1.482564}
+  - {x: 1.2784843, y: -1.5272913}
+  - {x: -2.6536865, y: -1.3794966}
+  - {x: -4.9376535, y: -1.2029381}
+  - {x: -11.047592, y: -2.4374456}
+  - {x: -14.72453, y: -3.369069}
+  - {x: -2.8500824, y: -3.3840942}
+  - {x: 9.812109, y: -3.3529944}
+  - {x: 8.472393, y: -2.941863}
+  - {x: 7.7723293, y: -2.5542154}
+  - {x: 3.0209956, y: -1.4551132}
+  - {x: 2.0765896, y: -1.4002628}
+  - {x: 1.9850273, y: -1.482564}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0

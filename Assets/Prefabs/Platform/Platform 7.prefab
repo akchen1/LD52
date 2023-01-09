@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &174957605133699038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 174957605133699011}
+  - component: {fileID: 174957605133699008}
+  - component: {fileID: 174957605133699009}
+  m_Layer: 3
+  m_Name: Platform 7
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &174957605133699011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174957605133699038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.95, y: 20.4, z: -9.904076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 174957605156728739}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &174957605133699008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174957605133699038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2156e90bb8785594b909cbf4262b8636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outerCollider: {fileID: 174957605133699009}
+  innerCollider: {fileID: 174957605156728736}
+--- !u!68 &174957605133699009
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174957605133699038}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.06785701, y: 1.3831569}
+  - {x: -0.7610814, y: 1.1801476}
+  - {x: -1.0029079, y: 1.0480144}
+  - {x: -1.079514, y: 0.7689568}
+  - {x: -1.1326672, y: 0.37681204}
+  - {x: -1.0838939, y: -0.46357632}
+  - {x: -0.47196808, y: -1.0116209}
+  - {x: 0.23957065, y: -1.1777874}
+  - {x: 0.9238672, y: -1.2662723}
+  - {x: 1.1505811, y: -1.1659214}
+  - {x: 1.4547524, y: -0.9190793}
+  - {x: 1.8258693, y: -0.26925895}
+  - {x: 2.0961268, y: 0.3042543}
+  - {x: 2.119672, y: 0.8682933}
+  - {x: 1.9829583, y: 1.4773788}
+  - {x: 1.7119374, y: 1.7660375}
+  - {x: 1.4640236, y: 1.8127131}
+  - {x: 1.1623847, y: 1.7773486}
+  - {x: 0.6180341, y: 1.6100665}
+  - {x: -0.06785701, y: 1.3831569}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
+--- !u!1 &174957605156728737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 174957605156728739}
+  - component: {fileID: 174957605156728736}
+  m_Layer: 3
+  m_Name: InnerBoundry
+  m_TagString: InnerWall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &174957605156728739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174957605156728737}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 174957605133699011}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!68 &174957605156728736
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174957605156728737}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.055606842, y: 1.1334572}
+  - {x: -0.62558794, y: 0.9700489}
+  - {x: -0.83006096, y: 0.8673935}
+  - {x: -0.8758912, y: 0.6239128}
+  - {x: -0.8954497, y: 0.29789522}
+  - {x: -0.85403484, y: -0.36526668}
+  - {x: -0.3662691, y: -0.7850647}
+  - {x: 0.18973923, y: -0.9328041}
+  - {x: 0.7765175, y: -1.0643117}
+  - {x: 0.9749789, y: -0.987978}
+  - {x: 1.2433991, y: -0.7855511}
+  - {x: 1.5785441, y: -0.23278618}
+  - {x: 1.8487196, y: 0.26834297}
+  - {x: 1.8883295, y: 0.77352715}
+  - {x: 1.7824817, y: 1.3280163}
+  - {x: 1.5379314, y: 1.5865326}
+  - {x: 1.3069453, y: 1.6182232}
+  - {x: 1.0255499, y: 1.568121}
+  - {x: 0.5284438, y: 1.3766708}
+  - {x: -0.055606842, y: 1.1334572}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
