@@ -205,8 +205,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 40
-  m_LinearDrag: 2
-  m_AngularDrag: 2
+  m_LinearDrag: 0
+  m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -249,6 +249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d209278bd7d052543a9033f8024aeaff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  landingPoint: {x: 0, y: 0}
+  offset: {x: 0, y: 0}
 --- !u!60 &3508551230927343683
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -485,7 +487,8 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.y
       value: 0.4699993
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4067324373851231482, guid: 4d81d29eb26e1454baca90f33fe1d002, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4d81d29eb26e1454baca90f33fe1d002, type: 3}
 --- !u!4 &5857275502294519038 stripped
 Transform:
