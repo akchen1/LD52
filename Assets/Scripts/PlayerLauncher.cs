@@ -13,6 +13,7 @@ public class PlayerLauncher : MonoBehaviour
     private Collider2D coll;
     private Animator animator;
     private float radius;
+    private Vector2 moveDir;
 
     // Set to the current platform the player is on
     [SerializeField] private Platform currentPlatform;
@@ -65,7 +66,7 @@ public class PlayerLauncher : MonoBehaviour
         Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
         child.transform.rotation = rot;
 
-        Debug.Log(normal.y);
+        //Debug.Log(normal.y);
 
         if (normal.y < 0) // on top
         {
@@ -87,8 +88,8 @@ public class PlayerLauncher : MonoBehaviour
 
             }
         }
-        Debug.DrawRay(transform.position, Vector3.up, Color.red);
-        Debug.DrawRay(transform.position, normal, Color.blue);
+        //Debug.DrawRay(transform.position, Vector3.up, Color.red);
+        //Debug.DrawRay(transform.position, normal, Color.blue);
     }
 
     private void SetAnimation()
@@ -98,8 +99,6 @@ public class PlayerLauncher : MonoBehaviour
         animator.SetBool("isLanding", state == PlayerState.Landing);
         animator.SetBool("isTransition", state == PlayerState.LandingTransition);
     }
-
-    private Vector2 moveDir;
     private void Move()
     {
         if (state != PlayerState.InPlatform) return;
@@ -167,11 +166,14 @@ public class PlayerLauncher : MonoBehaviour
         PlayerRigidbody.velocity = Vector2.zero;
         if (currentPlatform == null)
         {
-            // Insert dead function
-            Debug.Log("DEAD");
+            //Death Animation
+            child.transform.rotation = Quaternion.identity;
             state = PlayerState.Dead;
             PlayerRigidbody.velocity = Vector3.zero;
             PlayerRigidbody.angularVelocity = 0;
+
+            StartCoroutine(PlayerRespawn());
+            
         }
         else
         {
@@ -258,6 +260,14 @@ public class PlayerLauncher : MonoBehaviour
         }
         expectedPosition = (Vector2)transform.position + direction * radius;
         return null;
+    }
+    private IEnumerator PlayerRespawn(){
+        yield return new WaitForSeconds(1.167f);
+        //Death Function
+        GameObject spawnGO = GameObject.FindGameObjectWithTag("AreaManager").GetComponent<AreaManager>().GetCurrentSpawn();
+        transform.position = spawnGO.transform.position;
+        state = PlayerState.InPlatform;
+        currentPlatform = spawnGO.GetComponent<Respawn>().SpawnPlatform;
     }
 }
 

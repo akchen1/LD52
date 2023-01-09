@@ -59,10 +59,10 @@ public class BirdAIController : MonoBehaviour
         }
         UpdateAnimations();
     }
-
-    private void OnMouseDown() {
-        Debug.Log(gameObject.name);
-        BirdDie();
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.tag == "Player"){
+            BirdDie();
+        }       
     }
     private void UpdateAnimations()
     {

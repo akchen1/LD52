@@ -66,9 +66,8 @@ public class AreaManager : MonoBehaviour
 		spawnsDict.Add(4, a4Spawn);
 		spawnsDict.Add(5, a5Spawn);
 
-		currentArea = 0;
+		currentArea = 1;
 	}
-
 	public bool AddSoulToLantern()
 	{
 		// Check if area exists in dictionary
@@ -100,9 +99,9 @@ public class AreaManager : MonoBehaviour
 			coll.enabled = true;
 		}
 
-		// Enable new camera and disable old one
-		// camerasDict[newArea].SetActive(true);
-		// camerasDict[newArea].SetActive(false);
+		//Enable new camera and disable old one
+		camerasDict[newArea].SetActive(true);
+		camerasDict[currentArea].SetActive(false);
 
 		currentArea = newArea;
 	}
@@ -130,17 +129,18 @@ public class AreaManager : MonoBehaviour
 		return null;
 	}
 
-	public Vector3? GetCurrentSpawnPos()
+	public GameObject GetCurrentSpawn()
 	{
 		// Check if area exists in dictionary
 		if (spawnsDict.ContainsKey(currentArea))
 		{
 			// Return lantern
-			return spawnsDict[currentArea].position;
+			return spawnsDict[currentArea].gameObject;
 		}
 
 		// Log error
 		Debug.Log("Spawn position not found in area " + currentArea);
 		return null;
 	}
+
 }

@@ -20,14 +20,14 @@ public class PlayerKiller : MonoBehaviour
 		if (collision.gameObject.tag == "Player")
 		{
 			// Player dead
-			Vector3? spawnPos = areaManager.GetCurrentSpawnPos();
+			Vector3? spawnPos = areaManager.GetCurrentSpawn().transform.position;
 			if (spawnPos != null)
 			{
 				// Instantiate death animation at player death location
 				Instantiate(deathAnim, collision.gameObject.transform.position, Quaternion.identity);
 
 				// Move Player to spawn position
-				collision.gameObject.transform.position = (Vector3)areaManager.GetCurrentSpawnPos();
+				collision.gameObject.transform.position = (Vector3)areaManager.GetCurrentSpawn().transform.position;
 			}
 		}
 	}

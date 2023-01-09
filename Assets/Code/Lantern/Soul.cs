@@ -33,7 +33,6 @@ public class Soul : MonoBehaviour
 
 		// Update the object's position
 		transform.position = nextPosition;
-		Debug.Log(transform.position == lantern.transform.position);
 		if (transform.position == lantern.transform.position)
 		{
 			AM.AddSoulToLantern();
