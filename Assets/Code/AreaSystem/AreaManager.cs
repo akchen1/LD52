@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AreaManager : MonoBehaviour
 {
+	[SerializeField, Header("Area 0")] private GameObject a0Camera;
+
 	[SerializeField, Header("Area 1")] private List<Collider2D> a1Colliders;
 	[SerializeField] private Lantern a1Lantern;
 	[SerializeField] private GameObject a1Camera;
@@ -112,6 +114,14 @@ public class AreaManager : MonoBehaviour
 			coll.enabled = true;
 		}
 
+		if (currentArea == 0)
+		{
+			camerasDict[currentArea].SetActive(false);
+			backgroundDict[newArea].EnableParallax(newArea);
+			currentArea = newArea;
+			return;
+		}
+
 		//Enable new camera and disable old one
 		camerasDict[newArea].SetActive(true);
 		camerasDict[currentArea].SetActive(false);
@@ -120,7 +130,7 @@ public class AreaManager : MonoBehaviour
 		backgroundDict[newArea].EnableParallax(newArea);
 		currentArea = newArea;
 
-    }
+	}
 
 	public void ClearCurrentArea()
 	{
@@ -160,7 +170,7 @@ public class AreaManager : MonoBehaviour
 	}
 
 	public int GetCurrentArea()
-    {
+	{
 		return currentArea;
-    }
+	}
 }
