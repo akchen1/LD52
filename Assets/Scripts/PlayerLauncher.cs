@@ -49,6 +49,12 @@ public class PlayerLauncher : MonoBehaviour
         RotateChild();
     }
 
+    private void ChangeState(PlayerState newState)
+    {
+        Debug.Log(state + " to " + newState);
+        state = newState;
+    }
+
     private void RotateChild()
     {
         if (state != PlayerState.InPlatform) return;
@@ -65,7 +71,6 @@ public class PlayerLauncher : MonoBehaviour
         Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
         child.transform.rotation = rot;
 
-        Debug.Log(normal.y);
 
         if (normal.y < 0) // on top
         {
@@ -95,8 +100,8 @@ public class PlayerLauncher : MonoBehaviour
     {
         animator.SetBool("isDead", state == PlayerState.Dead);
         animator.SetBool("inPlatform", state == PlayerState.InPlatform);
-        animator.SetBool("isLanding", state == PlayerState.Landing);
         animator.SetBool("isTransition", state == PlayerState.LandingTransition);
+        animator.SetBool("isLanding", state == PlayerState.Landing);
     }
 
     private Vector2 moveDir;
@@ -169,13 +174,14 @@ public class PlayerLauncher : MonoBehaviour
         {
             // Insert dead function
             Debug.Log("DEAD");
-            state = PlayerState.Dead;
+            ChangeState(PlayerState.Dead);
             PlayerRigidbody.velocity = Vector3.zero;
             PlayerRigidbody.angularVelocity = 0;
         }
         else
         {
-            state = PlayerState.Landing;
+            ChangeState(PlayerState.Landing);
+            SetAnimation();
             coll.isTrigger = false;
             StartCoroutine(Land());
         }
@@ -184,11 +190,13 @@ public class PlayerLauncher : MonoBehaviour
     private IEnumerator Land()
     {
         // wait for land animation 3 frames / 8 fps + transition animation 3 frames / 8 fps
-        yield return new WaitForSeconds(3f / 8f);
-        state = PlayerState.LandingTransition;
-        yield return new WaitForSeconds(3f / 8f);
+        yield return new WaitForSecondsRealtime(3f / 8f - 0.3f);
+        ChangeState(PlayerState.LandingTransition);
+        SetAnimation();
+        yield return new WaitForSecondsRealtime(3f / 8f);
 
-        state = PlayerState.InPlatform;
+        ChangeState(PlayerState.InPlatform);
+        SetAnimation();
     }
 
     private void BeginJump()
@@ -221,7 +229,7 @@ public class PlayerLauncher : MonoBehaviour
 
         currentPlatform = platform;
 
-        state = PlayerState.InAir;
+        ChangeState(PlayerState.InAir);
 
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, mouseDirection);
         child.transform.rotation = rot;
