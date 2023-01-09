@@ -22,7 +22,8 @@ public class PolygonColliderToEdgeColliderEditor : EditorWindow
 			PolygonCollider2D innerTempCollider = gameObject.GetComponent<PolygonCollider2D>();
 
 			// Create a new game object for the outer collider
-			GameObject outerObject = new GameObject("Outer Collider");
+			GameObject outerObject = new GameObject("Platform");
+			outerObject.AddComponent<Platform>();
 			outerObject.transform.position = gameObject.transform.position;
 			gameObject.transform.SetParent(outerObject.transform);
 			outerObject.tag = "Wall";
@@ -51,7 +52,7 @@ public class PolygonColliderToEdgeColliderEditor : EditorWindow
 			points.Add(points[0]);
 			edge.points = points.ToArray();
 			DestroyImmediate(outerTempCollider);
-			gameObject.GetComponent<Platform>().outerCollider = edge;
+			outerObject.GetComponent<Platform>().outerCollider = edge;
 
 			points = innerTempCollider.points.ToList();
 			edge = innerTempCollider.gameObject.GetComponent<EdgeCollider2D>();
@@ -62,7 +63,7 @@ public class PolygonColliderToEdgeColliderEditor : EditorWindow
 			points.Add(points[0]);
 			edge.points = points.ToArray();
 			//DestroyImmediate(innerTempCollider);
-			gameObject.GetComponent<Platform>().innerCollider = edge;
+			outerObject.GetComponent<Platform>().innerCollider = edge;
 
 		}
 	}
