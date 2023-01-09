@@ -26,7 +26,9 @@ public class PlayerLauncher : MonoBehaviour
 
 	// Expected position where the player will end up after jumping
 	private Vector3 expectedPosition;
-
+	private Vector2 LaunchDirection;
+	private Vector3 maxPosition;
+	Platform expectedPlatform;
 	[SerializeField] private GameObject child;
 
 	private void Start()
@@ -50,9 +52,10 @@ public class PlayerLauncher : MonoBehaviour
 		SetAnimation();
 
 		RotateChild();
+		
 	}
 
-  private void RotateChild()
+	private void RotateChild()
     {
         if (state != PlayerState.InPlatform) return;
         Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
@@ -65,7 +68,7 @@ public class PlayerLauncher : MonoBehaviour
         Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
         child.transform.rotation = rot;
 
-		Debug.Log(normal);
+		//Debug.Log(normal);
         if (normal.y < 0) // on top
         {
             if (moveDir.magnitude != 0)
@@ -146,27 +149,38 @@ public class PlayerLauncher : MonoBehaviour
 	private void Travel()
 	{
 		if (state != PlayerState.InAir) return;
+		Vector2 direction = maxPosition - transform.position;
+		float distance = Vector2.Distance(maxPosition, transform.position);
 
-		if (Vector2.Distance(expectedPosition, transform.position) >= 0.1f)
+		if (distance >= 0.1f)   // Did not arrive yet, keep moving to max possible distance
 		{
-			Vector2 direction = expectedPosition - transform.position;
 			PlayerRigidbody.velocity = direction.normalized * 10f;
-			return;
 		}
 
+		// Check if arrived at expected position
+		direction = expectedPosition - transform.position;
+		distance = Vector2.Distance(expectedPosition, transform.position);
+		if (distance >= 0.1f)	// Did not arrive at expected position
+        {
+			return;
+        }
+
 		PlayerRigidbody.velocity = Vector2.zero;
-		if (currentPlatform == null)
+
+		if (expectedPlatform == null)
 		{
 			//Death Animation
 			DieHard();
 		}
 		else
 		{
-			state = PlayerState.Landing;
+      currentPlatform = expectedPlatform;
+      state = PlayerState.Landing;
 			coll.isTrigger = false;
 			StartCoroutine(Land());
 		}
 	}
+
 
 	public void DieHard()
 	{
@@ -180,6 +194,12 @@ public class PlayerLauncher : MonoBehaviour
 
 	private IEnumerator Land()
 	{
+		if (currentPlatform.GetComponent<RopePlatform>() != null)
+        {
+			//Vector2 direction = transform.position - ;
+            ApplyForce(currentPlatform, LaunchDirection.normalized);
+
+        }
 		// wait for land animation 3 frames / 8 fps + transition animation 3 frames / 8 fps
 		yield return new WaitForSeconds(3f / 8f);
 		state = PlayerState.LandingTransition;
@@ -203,27 +223,34 @@ public class PlayerLauncher : MonoBehaviour
 		// Normalize the direction and scale it by the launch force
 		mouseDirection = mouseDirection.normalized;
 
-
-		GameObject nextPlatform = CalculateNextPlatform(mouseDirection);
+		LaunchDirection = mouseDirection.normalized;
+		GameObject nextPlatform = CalculateExpectedPosition(mouseDirection, radius);
+		maxPosition = transform.position + (Vector3)mouseDirection * radius;
 		if (nextPlatform != null && nextPlatform.tag == "InnerWall")
 		{
 			return;
 		}
+		RopePlatform rP = nextPlatform?.GetComponent<RopePlatform>();
+		if (rP != null)
+        {
+			rP.SetLandingPoint(expectedPosition);
+        }
+
 		// Set player to trigger, Ignore all collision
 		coll.isTrigger = true;
 		SetRigidBodyType(currentPlatform, currentPlatformOriginalRBType);
 
 		Platform platform = nextPlatform?.GetComponent<Platform>();
-		SetRigidBodyType(platform, RigidbodyType2D.Static);
+		//SetRigidBodyType(platform, RigidbodyType2D.Static);
 
-		currentPlatform = platform;
-
-		state = PlayerState.InAir;
+		expectedPlatform = platform;
+		currentPlatform = null;
+		
+        state = PlayerState.InAir;
 
 		Quaternion rot = Quaternion.FromToRotation(Vector3.up, mouseDirection);
 		child.transform.rotation = rot;
 	}
-
 	private Vector3 GetMouseWorldPosition()
 	{
 		// Get the position of the mouse click
@@ -232,6 +259,15 @@ public class PlayerLauncher : MonoBehaviour
 		// Convert the mouse position to world space
 		return Camera.main.ScreenToWorldPoint(mousePos);
 	}
+
+	private void ApplyForce(Platform platform, Vector2 direction)
+    {
+		Debug.Log(platform?.name);
+		if (platform == null) return;
+		Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();
+		if (rb == null) return;
+        rb.AddForce(direction * 50, ForceMode2D.Impulse);
+    }
 
 	private void SetRigidBodyType(Platform platform, RigidbodyType2D type)
 	{
@@ -242,15 +278,26 @@ public class PlayerLauncher : MonoBehaviour
 		rb.bodyType = type;
 	}
 
-	private GameObject CalculateNextPlatform(Vector2 direction)
+	private RaycastHit2D[] CalculateNextPlatform(Vector2 direction, float distance)
 	{
 		// Calculated expected position
-		RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, radius, 1 << 3);
+		RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, distance, 1 << 3);
 		hits = hits.Where(x => x.collider.gameObject != currentPlatform.gameObject).OrderBy(x => Vector3.Distance(transform.position, x.point)).ToArray();
-
+		Debug.DrawRay(transform.position, direction, Color.green, 10f);
 		if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
 		{
-			expectedPosition = hits[0].point + direction * 0.15f;
+			return hits;
+		}
+		
+		return null;
+	}
+
+	private GameObject CalculateExpectedPosition(Vector2 direction, float distance)
+    {
+		RaycastHit2D[] hits = CalculateNextPlatform(direction, distance);
+		if (hits != null)
+        {
+			expectedPosition = hits[0].point + direction * 0.2f;
 			return hits[0].collider.gameObject;
 		}
 		expectedPosition = (Vector2)transform.position + direction * radius;
@@ -270,5 +317,20 @@ public class PlayerLauncher : MonoBehaviour
 		gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
 		state = PlayerState.InPlatform;
 	}
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+		if (state == PlayerState.InAir) return;
+		RopePlatform ropePlatform = collision.GetComponent<RopePlatform>();
+		if (ropePlatform != null && expectedPlatform.gameObject == ropePlatform.gameObject)
+        {
+			transform.position = transform.position + (Vector3)LaunchDirection * 0.2f;
+			expectedPosition = transform.position;
+			currentPlatform = expectedPlatform;
+			state = PlayerState.Landing;
+			coll.isTrigger = false;
+			StartCoroutine(Land());
+		}
+    }
 }
 
