@@ -52,41 +52,52 @@ public class PlayerLauncher : MonoBehaviour
 		RotateChild();
 	}
 
-	private void RotateChild()
-	{
-		if (state != PlayerState.InPlatform) return;
-		Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
-		float angle = Vector3.Angle(normal, Vector2.up);
+  private void RotateChild()
+    {
+        if (state != PlayerState.InPlatform) return;
+        Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
+        float angle = Vector3.Angle(normal, Vector2.up);
 
-		Vector3 temp = Vector3.Cross(normal, Vector3.down);
-		Vector3 groundSlopeDirection = Vector3.Cross(temp, normal);
-		float groundSlopeAngle = Vector3.Angle(normal, Vector3.up);
+        Vector3 temp = Vector3.Cross(normal, Vector3.down);
+        Vector3 groundSlopeDirection = Vector3.Cross(temp, normal);
+        float groundSlopeAngle = Vector3.Angle(normal, Vector3.up);
 
-		Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
-		child.transform.rotation = rot;
+        Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
+        child.transform.rotation = rot;
 
-		if (normal.y < 0) // on top
-		{
-			if (moveDir.magnitude != 0)
-			{
-				Vector3 childScale = child.transform.localScale;
-				childScale.x = moveDir.x < 0 ? -1 : 1;
-				child.transform.localScale = childScale;
+        if (normal.y < 0) // on top
+        {
+            if (moveDir.magnitude != 0)
+            {
+                Vector3 childScale = child.transform.localScale;
+                childScale.x = moveDir.x < 0 ? -1 : 1;
+                child.transform.localScale = childScale;
 
-			}
+            }
 
-		}
-		else if (normal.y > 0)
-		{
-			if (moveDir.magnitude != 0)
-			{
-				Vector3 childScale = child.transform.localScale;
-				childScale.x = moveDir.x < 0 ? 1 : -1;
-				child.transform.localScale = childScale;
+        } else if (normal.y > 0)
+        {
+            if (moveDir.magnitude != 0)
+            {
+                Vector3 childScale = child.transform.localScale;
+                if (moveDir.y == 0) // im not pressing up or down
+                {
+                    childScale.x = moveDir.x < 0 ? 1 : -1;
 
-			}
-		}
-	}
+                } else if (moveDir.x == 0)// im not presssing left or right
+                {
+                    childScale.x = moveDir.y < 0 ? 1 : -1;
+                }
+                else// I am pressing both
+                {
+                    childScale.x = moveDir.x < 0 ? 1 : -1;
+                }
+
+                child.transform.localScale = childScale;
+
+            }
+        }
+    }
 
 	private void SetAnimation()
 	{
