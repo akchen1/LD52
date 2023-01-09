@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 public class PlayerLauncher : MonoBehaviour
 {
-	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead }
+	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning}
 	// The Rigidbody2D component of the Player object
 	public Rigidbody2D PlayerRigidbody;
 	//The strength the player is launched
@@ -94,6 +94,7 @@ public class PlayerLauncher : MonoBehaviour
 		animator.SetBool("inPlatform", state == PlayerState.InPlatform);
 		animator.SetBool("isLanding", state == PlayerState.Landing);
 		animator.SetBool("isTransition", state == PlayerState.LandingTransition);
+        animator.SetBool("isRespawning", state == PlayerState.Respawning);
 	}
 
 	private void Move()
@@ -242,8 +243,12 @@ public class PlayerLauncher : MonoBehaviour
 		//Death Function
 		GameObject spawnGO = GameObject.FindGameObjectWithTag("AreaManager").GetComponent<AreaManager>().GetCurrentSpawn();
 		transform.position = spawnGO.transform.position;
+        state = PlayerState.Respawning;
+
+        yield return new WaitForSeconds(0.833f);
+        currentPlatform = spawnGO.GetComponent<Respawn>().SpawnPlatform;
+        gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
 		state = PlayerState.InPlatform;
-		currentPlatform = spawnGO.GetComponent<Respawn>().SpawnPlatform;
 	}
 }
 
