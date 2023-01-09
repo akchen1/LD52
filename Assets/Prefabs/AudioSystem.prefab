@@ -48,18 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SfxSource: {fileID: 8609705006498609411}
   MusicSource: {fileID: 8609705006498609408}
-  level1Theme: {fileID: 0}
-  level2Theme: {fileID: 0}
-  level3Theme: {fileID: 0}
-  level4Theme: {fileID: 0}
-  level5Theme: {fileID: 0}
-  foxDash: {fileID: 0}
+  themeA: {fileID: 0}
+  themeB: {fileID: 8300000, guid: 7553a0ee5b9fe874683790340c0b0015, type: 3}
+  themeC: {fileID: 8300000, guid: b9b1f35b0bc10034cac3689a3b54a421, type: 3}
+  themeD: {fileID: 8300000, guid: 5e41251ff1f581a49ae0390c83371658, type: 3}
+  themeDIntro: {fileID: 8300000, guid: afa17ff7c2bde7147bc8cce7217316da, type: 3}
+  themeE: {fileID: 8300000, guid: bfed6e903db74d949a09be0d9ffc25c2, type: 3}
+  foxDash: {fileID: 8300000, guid: 03a81b9b7d17d2745b75d470d79bd73a, type: 3}
   foxDeath: {fileID: 8300000, guid: 03d53bd3ee1b69042b9c4bdedaca9f42, type: 3}
-  birdDeath: {fileID: 0}
+  birdDeath: {fileID: 8300000, guid: e3b9c86295e479a45a91d4f60c54e3a0, type: 3}
   lanternCollect: {fileID: 0}
   lanternCompleted: {fileID: 8300000, guid: 551c1de5f772d8942a5ed75e32ec1d68, type: 3}
   waterRockSplash: {fileID: 0}
   waterFoxSplash: {fileID: 0}
+  fadeTime: 0
 --- !u!82 &8609705006498609411
 AudioSource:
   m_ObjectHideFlags: 0
