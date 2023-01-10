@@ -31,6 +31,8 @@ public class PlayerLauncher : MonoBehaviour
 	private Vector3 startLaunchPosition;
 	private Platform expectedPlatform;
 
+	private float directionScale;	// Keeps the player moving in the same direction if holding down a key
+
 	[SerializeField] private GameObject child;
 	float playerRadius;
 	private void Start()
@@ -41,6 +43,7 @@ public class PlayerLauncher : MonoBehaviour
 		animator = GetComponentInChildren<Animator>();
 		state = PlayerState.InPlatform;
 		playerRadius = GetComponent<CircleCollider2D>().radius;
+
 	}
 
 	private void Update()
@@ -55,39 +58,25 @@ public class PlayerLauncher : MonoBehaviour
 		SetAnimation();
 
 		RotateChild();
-	}
+        //Debug.DrawRay(transform.position, child.transform.right, Color.red);
+        //Debug.DrawRay(transform.position, child.transform.up, Color.green);
+
+
+    }
 
 	private void RotateChild()
     {
         if (state != PlayerState.InPlatform) return;
         Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
 
-        child.transform.rotation = Quaternion.FromToRotation(Vector3.down, normal);
+		float angle = Vector2.SignedAngle(Vector2.down, normal);
+		child.transform.eulerAngles = new Vector3(0, 0, angle);
 
-		if (moveDir.magnitude == 0) return;
 
-		Vector3 childScale = child.transform.localScale;
-        if (normal.y <= 0) // on top
-        {
-			childScale.x = moveDir.x < 0 ? -1 : 1;
-			child.transform.localScale = childScale;
-
-		} else if (normal.y > 0)
-        {
-			if (moveDir.y == 0) // im not pressing up or down
-			{
-				childScale.x = moveDir.x < 0 ? 1 : -1;
-			}
-			else // im not presssing left or right
-			{
-				if (normal.x < 0)
-					childScale.x = moveDir.y < 0 ? 1 : -1;
-				else
-					childScale.x = moveDir.y < 0 ? -1 : 1;
-			}
-
-			child.transform.localScale = childScale;
-		}
+        Vector3 childScale = child.transform.localScale;
+		childScale.x = Mathf.Sign(-moveDir.x) * Mathf.Sign(normal.y);
+		
+		child.transform.localScale = childScale;
     }
 
 	private void SetAnimation()
@@ -104,29 +93,36 @@ public class PlayerLauncher : MonoBehaviour
 		if (state != PlayerState.InPlatform) return;
 		Vector2 move = transform.position;
 		moveDir = Vector2.zero;
+		float speed = 0;
+		int normalScale = 1;	// scales the up direction depending if going left or right
+
+		Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
+		if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+		{
+            directionScale = Mathf.Sign(-normal.y);
+        }
+
 		if (Input.GetKey(KeyCode.A))
 		{
-			moveDir.x -= .1f;
+			speed += -0.1f;
+			normalScale = -1;
 		}
 		if (Input.GetKey(KeyCode.D))
 		{
-			moveDir.x += .1f;
-		}
-		if (Input.GetKey(KeyCode.W))
-		{
-			moveDir.y += .1f;
-
-		}
-		if (Input.GetKey(KeyCode.S))
-		{
-			moveDir.y -= .1f;
+			speed += 0.1f;
 		}
 
-		move += moveDir;
-		PlayerRigidbody.MovePosition(move);
+		moveDir = directionScale * (Vector2)child.transform.right * speed;
+
+		Vector2 trueDirection = moveDir + ((Vector2)child.transform.up * speed * normalScale);
+	
+		move +=  trueDirection;
+
+        PlayerRigidbody.MovePosition(move);
 		animator.SetFloat("Horizontal", move.x);
 		animator.SetFloat("Vertical", move.y);
-		animator.SetBool("isMoving", moveDir.magnitude >= 0.1f);
+		animator.SetBool("isMoving", moveDir.magnitude > 0);
+
 	}
 
 	private void Travel()
@@ -212,10 +208,8 @@ public class PlayerLauncher : MonoBehaviour
 		launchDirection = mouseDirection.normalized;
 		// Set player to trigger, Ignore all collision
 		coll.isTrigger = true;
-		SetRigidBodyType(currentPlatform, currentPlatformOriginalRBType);
 
 		Platform platform = nextPlatform?.GetComponent<Platform>();
-		//SetRigidBodyType(platform, RigidbodyType2D.Static);
 
 		expectedPlatform = platform;
 
@@ -242,14 +236,6 @@ public class PlayerLauncher : MonoBehaviour
         rb.AddForce(direction * 50, ForceMode2D.Impulse);
     }
 
-	private void SetRigidBodyType(Platform platform, RigidbodyType2D type)
-	{
-		if (platform == null) return;
-		Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();
-		if (rb == null) return;
-		currentPlatformOriginalRBType = rb.bodyType;
-		rb.bodyType = type;
-	}
 
 	private RaycastHit2D[] CalculateNextPlatform(Vector2 startPosition, Vector2 direction, float distance)
 	{
@@ -272,7 +258,7 @@ public class PlayerLauncher : MonoBehaviour
 		RaycastHit2D[] hits = CalculateNextPlatform(startPosition, direction, distance);
 		if (hits != null)
         {
-			expectedPosition = hits[0].point + direction * 0.1f;
+			expectedPosition = hits[0].point - direction * 0.1f;
 			return hits[0].collider.gameObject;
 		}
 		expectedPosition = startPosition + direction * distance;
