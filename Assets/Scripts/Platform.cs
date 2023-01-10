@@ -23,7 +23,6 @@ public class Platform : MonoBehaviour
 		Vector2 p = outerCollider.ClosestPoint(point);
 		Vector2 direction = (p - point).normalized;
 		RaycastHit2D hit = Physics2D.Raycast(point, direction, direction.magnitude, 1 << 3);
-		Debug.DrawRay(point, direction);
 		return hit.normal;
 	}
 }

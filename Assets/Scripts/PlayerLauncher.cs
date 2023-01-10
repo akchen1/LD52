@@ -26,11 +26,13 @@ public class PlayerLauncher : MonoBehaviour
 
 	// Expected position where the player will end up after jumping
 	private Vector3 expectedPosition;
-	private Vector2 LaunchDirection;
-	private Vector3 maxPosition;
-	Platform expectedPlatform;
-	[SerializeField] private GameObject child;
+	private Vector2 launchDirection;
+	private Vector3 maxLaunchPosition;
+	private Vector3 startLaunchPosition;
+	private Platform expectedPlatform;
 
+	[SerializeField] private GameObject child;
+	float playerRadius;
 	private void Start()
 	{
 		AC = this.gameObject.GetComponent<AimController>();
@@ -38,6 +40,7 @@ public class PlayerLauncher : MonoBehaviour
 		coll = GetComponent<Collider2D>();
 		animator = GetComponentInChildren<Animator>();
 		state = PlayerState.InPlatform;
+		playerRadius = GetComponent<CircleCollider2D>().radius;
 	}
 
 	private void Update()
@@ -52,59 +55,39 @@ public class PlayerLauncher : MonoBehaviour
 		SetAnimation();
 
 		RotateChild();
-		
 	}
 
 	private void RotateChild()
     {
         if (state != PlayerState.InPlatform) return;
         Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
-        float angle = Vector3.Angle(normal, Vector2.up);
 
-        Vector3 temp = Vector3.Cross(normal, Vector3.down);
-        Vector3 groundSlopeDirection = Vector3.Cross(temp, normal);
-        float groundSlopeAngle = Vector3.Angle(normal, Vector3.up);
+        child.transform.rotation = Quaternion.FromToRotation(Vector3.down, normal);
 
-        Quaternion rot = Quaternion.FromToRotation(Vector3.down, normal);
-        child.transform.rotation = rot;
+		if (moveDir.magnitude == 0) return;
 
-		//Debug.Log(normal);
-        if (normal.y < 0) // on top
+		Vector3 childScale = child.transform.localScale;
+        if (normal.y <= 0) // on top
         {
-            if (moveDir.magnitude != 0)
-            {
-                Vector3 childScale = child.transform.localScale;
-                childScale.x = moveDir.x < 0 ? -1 : 1;
-                child.transform.localScale = childScale;
+			childScale.x = moveDir.x < 0 ? -1 : 1;
+			child.transform.localScale = childScale;
 
-            }
-
-        } else if (normal.y > 0)
+		} else if (normal.y > 0)
         {
-            if (moveDir.magnitude != 0)
-            {
-				//Debug.Log(moveDir);
-                Vector3 childScale = child.transform.localScale;
-                if (moveDir.y == 0) // im not pressing up or down
-                {
-                    childScale.x = moveDir.x < 0 ? 1 : -1;
+			if (moveDir.y == 0) // im not pressing up or down
+			{
+				childScale.x = moveDir.x < 0 ? 1 : -1;
+			}
+			else // im not presssing left or right
+			{
+				if (normal.x < 0)
+					childScale.x = moveDir.y < 0 ? 1 : -1;
+				else
+					childScale.x = moveDir.y < 0 ? -1 : 1;
+			}
 
-                } else if (moveDir.x == 0)// im not presssing left or right
-                {
-					if (normal.x < 0)
-						childScale.x = moveDir.y < 0 ? 1 : -1;
-					else
-						childScale.x = moveDir.y < 0 ? -1 : 1;
-				}
-				else// I am pressing both
-                {
-                    childScale.x = moveDir.x < 0 ? 1 : -1;
-                }
-
-                child.transform.localScale = childScale;
-
-            }
-        }
+			child.transform.localScale = childScale;
+		}
     }
 
 	private void SetAnimation()
@@ -149,33 +132,29 @@ public class PlayerLauncher : MonoBehaviour
 	private void Travel()
 	{
 		if (state != PlayerState.InAir) return;
-		Vector2 direction = maxPosition - transform.position;
-		float distance = Vector2.Distance(maxPosition, transform.position);
 
-		if (distance >= 0.1f)   // Did not arrive yet, keep moving to max possible distance
-		{
-			PlayerRigidbody.velocity = direction.normalized * 10f;
-		}
-
+		CalculateExpectedPosition(startLaunchPosition, (maxLaunchPosition - startLaunchPosition).normalized, (maxLaunchPosition - startLaunchPosition).magnitude);
 		// Check if arrived at expected position
-		direction = expectedPosition - transform.position;
-		distance = Vector2.Distance(expectedPosition, transform.position);
+		Vector2 direction = (expectedPosition - transform.position).normalized;
+		float distance = Vector2.Distance(expectedPosition, transform.position);
+
 		if (distance >= 0.1f)	// Did not arrive at expected position
         {
+			PlayerRigidbody.velocity = direction.normalized * 10f;
+
 			return;
-        }
+        } 
 
 		PlayerRigidbody.velocity = Vector2.zero;
 
 		if (expectedPlatform == null)
 		{
-			//Death Animation
 			DieHard();
 		}
 		else
 		{
-      currentPlatform = expectedPlatform;
-      state = PlayerState.Landing;
+			currentPlatform = expectedPlatform;
+			state = PlayerState.Landing;
 			coll.isTrigger = false;
 			StartCoroutine(Land());
 		}
@@ -197,11 +176,11 @@ public class PlayerLauncher : MonoBehaviour
 		if (currentPlatform.GetComponent<RopePlatform>() != null)
         {
 			//Vector2 direction = transform.position - ;
-            ApplyForce(currentPlatform, LaunchDirection.normalized);
+            ApplyForce(currentPlatform, launchDirection.normalized);
 
         }
 		// wait for land animation 3 frames / 8 fps + transition animation 3 frames / 8 fps
-		yield return new WaitForSeconds(3f / 8f);
+		yield return new WaitForSeconds(3f / 8f - 0.1f);
 		state = PlayerState.LandingTransition;
 		yield return new WaitForSeconds(3f / 8f);
 
@@ -218,24 +197,19 @@ public class PlayerLauncher : MonoBehaviour
 
 		// Calculate the direction and distance from the Player to the mouse click
 		Vector2 mouseDirection = worldPos - transform.position;
-		float distance = mouseDirection.magnitude;
 
 		// Normalize the direction and scale it by the launch force
 		mouseDirection = mouseDirection.normalized;
 
-		LaunchDirection = mouseDirection.normalized;
-		GameObject nextPlatform = CalculateExpectedPosition(mouseDirection, radius);
-		maxPosition = transform.position + (Vector3)mouseDirection * radius;
-		if (nextPlatform != null && nextPlatform.tag == "InnerWall")
+
+		GameObject nextPlatform = CalculateExpectedPosition(transform.position, mouseDirection, radius);
+		if ((nextPlatform != null && nextPlatform.tag == "InnerWall"))
 		{
 			return;
 		}
-		RopePlatform rP = nextPlatform?.GetComponent<RopePlatform>();
-		if (rP != null)
-        {
-			rP.SetLandingPoint(expectedPosition);
-        }
 
+		maxLaunchPosition = transform.position + (Vector3)mouseDirection * radius;
+		launchDirection = mouseDirection.normalized;
 		// Set player to trigger, Ignore all collision
 		coll.isTrigger = true;
 		SetRigidBodyType(currentPlatform, currentPlatformOriginalRBType);
@@ -244,11 +218,11 @@ public class PlayerLauncher : MonoBehaviour
 		//SetRigidBodyType(platform, RigidbodyType2D.Static);
 
 		expectedPlatform = platform;
-		currentPlatform = null;
-		
+
+        startLaunchPosition = transform.position;
         state = PlayerState.InAir;
 
-		Quaternion rot = Quaternion.FromToRotation(Vector3.up, mouseDirection);
+        Quaternion rot = Quaternion.FromToRotation(Vector3.up, mouseDirection);
 		child.transform.rotation = rot;
 	}
 	private Vector3 GetMouseWorldPosition()
@@ -262,7 +236,6 @@ public class PlayerLauncher : MonoBehaviour
 
 	private void ApplyForce(Platform platform, Vector2 direction)
     {
-		Debug.Log(platform?.name);
 		if (platform == null) return;
 		Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();
 		if (rb == null) return;
@@ -278,12 +251,14 @@ public class PlayerLauncher : MonoBehaviour
 		rb.bodyType = type;
 	}
 
-	private RaycastHit2D[] CalculateNextPlatform(Vector2 direction, float distance)
+	private RaycastHit2D[] CalculateNextPlatform(Vector2 startPosition, Vector2 direction, float distance)
 	{
 		// Calculated expected position
-		RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, distance, 1 << 3);
-		hits = hits.Where(x => x.collider.gameObject != currentPlatform.gameObject).OrderBy(x => Vector3.Distance(transform.position, x.point)).ToArray();
-		Debug.DrawRay(transform.position, direction, Color.green, 10f);
+		
+		Vector2 offset = direction * playerRadius * transform.localScale;
+		RaycastHit2D[] hits = Physics2D.RaycastAll(startPosition + offset, direction, distance - playerRadius, 1 << 3);
+		hits = hits.Where(x => x.collider.gameObject != currentPlatform?.gameObject).OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
+
 		if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
 		{
 			return hits;
@@ -292,15 +267,15 @@ public class PlayerLauncher : MonoBehaviour
 		return null;
 	}
 
-	private GameObject CalculateExpectedPosition(Vector2 direction, float distance)
+	private GameObject CalculateExpectedPosition(Vector2 startPosition, Vector2 direction, float distance)
     {
-		RaycastHit2D[] hits = CalculateNextPlatform(direction, distance);
+		RaycastHit2D[] hits = CalculateNextPlatform(startPosition, direction, distance);
 		if (hits != null)
         {
-			expectedPosition = hits[0].point + direction * 0.2f;
+			expectedPosition = hits[0].point + direction * 0.1f;
 			return hits[0].collider.gameObject;
 		}
-		expectedPosition = (Vector2)transform.position + direction * radius;
+		expectedPosition = startPosition + direction * distance;
 		return null;
 	}
 
@@ -317,20 +292,5 @@ public class PlayerLauncher : MonoBehaviour
 		gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
 		state = PlayerState.InPlatform;
 	}
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-		if (state == PlayerState.InAir) return;
-		RopePlatform ropePlatform = collision.GetComponent<RopePlatform>();
-		if (ropePlatform != null && expectedPlatform.gameObject == ropePlatform.gameObject)
-        {
-			transform.position = transform.position + (Vector3)LaunchDirection * 0.2f;
-			expectedPosition = transform.position;
-			currentPlatform = expectedPlatform;
-			state = PlayerState.Landing;
-			coll.isTrigger = false;
-			StartCoroutine(Land());
-		}
-    }
 }
 
