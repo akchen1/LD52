@@ -6,13 +6,12 @@ public class PlayerLauncher : MonoBehaviour
 	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning }
 	// The Rigidbody2D component of the Player object
 	public Rigidbody2D PlayerRigidbody;
-	//The strength the player is launched
 
 	//Controller for AimController
 	private AimController AC;
 	private Collider2D coll;
 	private Animator animator;
-	private float radius;
+	private float radius;	// launch radius
 	private Vector2 moveDir;
 
 	// Set to the current platform the player is on
@@ -30,6 +29,7 @@ public class PlayerLauncher : MonoBehaviour
 	private Vector3 maxLaunchPosition;
 	private Vector3 startLaunchPosition;
 	private Platform expectedPlatform;
+	private Vector2 normal;
 
 	private float directionScale;	// Keeps the player moving in the same direction if holding down a key
 
@@ -50,24 +50,21 @@ public class PlayerLauncher : MonoBehaviour
 	{
 		if (state == PlayerState.Dead) return;
 		BeginJump();
-
 		Travel();
-
 		Move();
-
+		RotateChild();
 		SetAnimation();
 
-		RotateChild();
-        //Debug.DrawRay(transform.position, child.transform.right, Color.red);
-        //Debug.DrawRay(transform.position, child.transform.up, Color.green);
+		//Debug.DrawRay(transform.position, child.transform.right, Color.red);
+		//Debug.DrawRay(transform.position, child.transform.up, Color.green);
 
-
-    }
+		
+	}
 
 	private void RotateChild()
     {
         if (state != PlayerState.InPlatform) return;
-        Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
+        normal = currentPlatform.GetClosestEdge(transform.position);
 
 		float angle = Vector2.SignedAngle(Vector2.down, normal);
 		child.transform.eulerAngles = new Vector3(0, 0, angle);
@@ -96,7 +93,6 @@ public class PlayerLauncher : MonoBehaviour
 		float speed = 0;
 		int normalScale = 1;	// scales the up direction depending if going left or right
 
-		Vector2 normal = currentPlatform.GetClosestEdge(transform.position);
 		if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
 		{
             directionScale = Mathf.Sign(-normal.y);
@@ -129,7 +125,14 @@ public class PlayerLauncher : MonoBehaviour
 	{
 		if (state != PlayerState.InAir) return;
 
-		CalculateExpectedPosition(startLaunchPosition, (maxLaunchPosition - startLaunchPosition).normalized, (maxLaunchPosition - startLaunchPosition).magnitude);
+		Vector2 moveVector = maxLaunchPosition - startLaunchPosition;
+
+		bool checkIfSame = currentPlatform.GetComponent<RopePlatform>() != null;
+
+		GameObject expected = CalculateExpectedPosition(startLaunchPosition, moveVector.normalized, moveVector.magnitude, checkIfSame);
+		expectedPlatform = expected?.GetComponent<Platform>();
+
+
 		// Check if arrived at expected position
 		Vector2 direction = (expectedPosition - transform.position).normalized;
 		float distance = Vector2.Distance(expectedPosition, transform.position);
@@ -150,6 +153,7 @@ public class PlayerLauncher : MonoBehaviour
 		else
 		{
 			currentPlatform = expectedPlatform;
+			expectedPlatform = null;
 			state = PlayerState.Landing;
 			coll.isTrigger = false;
 			StartCoroutine(Land());
@@ -181,6 +185,9 @@ public class PlayerLauncher : MonoBehaviour
 		yield return new WaitForSeconds(3f / 8f);
 
 		state = PlayerState.InPlatform;
+		normal = currentPlatform.GetClosestEdge(transform.position);
+
+		directionScale = Mathf.Sign(-normal.y);
 	}
 
 	private void BeginJump()
@@ -197,17 +204,14 @@ public class PlayerLauncher : MonoBehaviour
 		// Normalize the direction and scale it by the launch force
 		mouseDirection = mouseDirection.normalized;
 
-
-		GameObject nextPlatform = CalculateExpectedPosition(transform.position, mouseDirection, radius);
-		if ((nextPlatform != null && nextPlatform.tag == "InnerWall"))
-		{
+		
+		GameObject nextPlatform = CalculateExpectedPosition(transform.position, mouseDirection, radius, false);
+		if (currentPlatform.gameObject == nextPlatform.gameObject && Vector3.Distance(expectedPosition, transform.position) <= 1f)
+        {
 			return;
-		}
+        }
 
-		// Set player to trigger, Ignore all collision
-
-		Platform platform = nextPlatform?.GetComponent<Platform>();
-
+        Platform platform = nextPlatform?.GetComponent<Platform>();
 		if (platform?.GetComponent<RopePlatform>() != null && currentPlatform.gameObject == platform.gameObject)
         {
 			return;
@@ -237,17 +241,26 @@ public class PlayerLauncher : MonoBehaviour
 		if (platform == null) return;
 		Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();
 		if (rb == null) return;
-        rb.AddForce(direction * 50, ForceMode2D.Impulse);
+        rb.AddForce(direction * 100, ForceMode2D.Impulse);
     }
 
 
-	private RaycastHit2D[] CalculateNextPlatform(Vector2 startPosition, Vector2 direction, float distance)
+	private RaycastHit2D[] CalculateNextPlatform(Vector2 startPosition, Vector2 direction, float distance, bool checkIfSame)
 	{
 		// Calculated expected position
 		
 		Vector2 offset = direction * playerRadius * transform.localScale;
 		RaycastHit2D[] hits = Physics2D.RaycastAll(startPosition + offset, direction, distance - playerRadius, 1 << 3);
-        hits = hits.OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
+        hits = hits
+            .Where(x =>
+            {
+				if (checkIfSame)
+                {
+					return x.collider.gameObject != currentPlatform?.gameObject && currentPlatform?.gameObject != expectedPlatform?.gameObject;
+				}
+				return true;
+            })
+            .OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
 
         if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
 		{
@@ -257,11 +270,12 @@ public class PlayerLauncher : MonoBehaviour
 		return null;
 	}
 
-	private GameObject CalculateExpectedPosition(Vector2 startPosition, Vector2 direction, float distance)
+	private GameObject CalculateExpectedPosition(Vector2 startPosition, Vector2 direction, float distance, bool checkIfSame)
     {
-		RaycastHit2D[] hits = CalculateNextPlatform(startPosition, direction, distance);
+		RaycastHit2D[] hits = CalculateNextPlatform(startPosition, direction, distance, checkIfSame);
 		if (hits != null)
         {
+
 			expectedPosition = hits[0].point - direction * 0.1f;
 			return hits[0].collider.gameObject;
 		}
