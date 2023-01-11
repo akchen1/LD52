@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class AreaManager : MonoBehaviour
 {
-	[SerializeField, Header("Area 0")] private GameObject a0Camera;
+	public int StartArea;
+	[SerializeField, Header("Area 0")] private List<Collider2D> a0Colliders;
+	[SerializeField] private GameObject a0Camera;
+	[SerializeField] private Transform a0Spawn;
 
 	[SerializeField, Header("Area 1")] private List<Collider2D> a1Colliders;
 	[SerializeField] private Lantern a1Lantern;
@@ -47,6 +50,7 @@ public class AreaManager : MonoBehaviour
 	private void Awake()
 	{
 		// Add all colliders into dictionary
+		collidersDict.Add(0, a0Colliders);
 		collidersDict.Add(1, a1Colliders);
 		collidersDict.Add(2, a2Colliders);
 		collidersDict.Add(3, a3Colliders);
@@ -61,6 +65,7 @@ public class AreaManager : MonoBehaviour
 		lanternsDict.Add(5, a5Lantern);
 
 		// Add all cameras into dictionary
+		camerasDict.Add(0, a0Camera);
 		camerasDict.Add(1, a1Camera);
 		camerasDict.Add(2, a2Camera);
 		camerasDict.Add(3, a3Camera);
@@ -68,6 +73,7 @@ public class AreaManager : MonoBehaviour
 		camerasDict.Add(5, a5Camera);
 
 		// Add spawns into dictionary
+		spawnsDict.Add(0, a0Spawn);
 		spawnsDict.Add(1, a1Spawn);
 		spawnsDict.Add(2, a2Spawn);
 		spawnsDict.Add(3, a3Spawn);
@@ -80,8 +86,8 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(3, a3Background);
 		backgroundDict.Add(4, a4Background);
 		backgroundDict.Add(5, a5Background);
-
-		currentArea = 1;
+		currentArea = 0;
+		EnterArea(4);
 	}
 	public bool AddSoulToLantern()
 	{
@@ -114,20 +120,12 @@ public class AreaManager : MonoBehaviour
 			coll.enabled = true;
 		}
 
-		if (currentArea == 0)
-		{
-			camerasDict[currentArea].SetActive(false);
-			backgroundDict[newArea].EnableParallax(newArea);
-			currentArea = newArea;
-			return;
-		}
-
 		//Enable new camera and disable old one
 		camerasDict[newArea].SetActive(true);
 		camerasDict[currentArea].SetActive(false);
 
-		backgroundDict[currentArea].DeactivateParallax(currentArea);
-		backgroundDict[newArea].EnableParallax(newArea);
+		//backgroundDict[currentArea].DeactivateParallax(currentArea);
+		//backgroundDict[newArea].EnableParallax(newArea);
 		currentArea = newArea;
 
 	}

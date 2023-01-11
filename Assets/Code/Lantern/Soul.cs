@@ -7,11 +7,14 @@ public class Soul : MonoBehaviour
 
 	private Lantern lantern;
 
+	private Vector3 targetPosition;
+
 	void Start()
 	{
 		AM = GameObject.Find("Area Manager").GetComponent<AreaManager>();
 		lantern = AM.GetCurrentLantern();
-		Vector2 targetPosition = lantern.transform.position;
+		targetPosition = lantern.Indicators[lantern.CurrentSouls].transform.position;
+
 		float angle = Mathf.Atan2(targetPosition.y - transform.position.y, targetPosition.x - transform.position.x);
 
 		// Convert the angle from radians to degrees
@@ -29,11 +32,11 @@ public class Soul : MonoBehaviour
 		Vector2 currentPosition = transform.position;
 
 		// Calculate the next position
-		Vector2 nextPosition = Vector2.MoveTowards(currentPosition, lantern.transform.position, speed * Time.deltaTime);
+		Vector2 nextPosition = Vector2.MoveTowards(currentPosition, targetPosition, speed * Time.deltaTime);
 
 		// Update the object's position
 		transform.position = nextPosition;
-		if (transform.position == lantern.transform.position)
+		if (transform.position == targetPosition)
 		{
 			AM.AddSoulToLantern();
 			Destroy(gameObject);

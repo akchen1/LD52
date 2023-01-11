@@ -161,6 +161,7 @@ public class PlayerLauncher : MonoBehaviour
 	{
 		child.transform.rotation = Quaternion.identity;
 		state = PlayerState.Dead;
+		SetAnimation();
 		PlayerRigidbody.velocity = Vector3.zero;
 		PlayerRigidbody.angularVelocity = 0;
 

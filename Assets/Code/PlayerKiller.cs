@@ -14,12 +14,12 @@ public class PlayerKiller : MonoBehaviour
 		areaManager = GameObject.FindGameObjectWithTag("AreaManager").GetComponent<AreaManager>();
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
-	{
-		if (collision.gameObject.tag == "Player")
-		{
-			// Player dead
-			collision.gameObject.GetComponent<PlayerLauncher>().DieHard();
+
+	void OnTriggerEnter2D(Collider2D player) {
+		if (player.gameObject.tag == "Player") {
+			var objectThatMadeItTrigger = player.gameObject;
+			player.gameObject.GetComponent<PlayerLauncher>().DieHard();
 		}
 	}
+
 }
