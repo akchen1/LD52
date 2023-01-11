@@ -204,14 +204,23 @@ public class PlayerLauncher : MonoBehaviour
 			return;
 		}
 
-		maxLaunchPosition = transform.position + (Vector3)mouseDirection * radius;
-		launchDirection = mouseDirection.normalized;
 		// Set player to trigger, Ignore all collision
-		coll.isTrigger = true;
 
 		Platform platform = nextPlatform?.GetComponent<Platform>();
-
+		Debug.Log(currentPlatform.name);
+		Debug.Log(platform?.name);
+		if (platform?.GetComponent<RopePlatform>() != null && currentPlatform.gameObject == platform.gameObject)
+        {
+			return;
+        }
+		maxLaunchPosition = transform.position + (Vector3)mouseDirection * radius;
+		launchDirection = mouseDirection.normalized;
+		coll.isTrigger = true;
 		expectedPlatform = platform;
+		//if (expectedPlatform == currentPlatform)
+  //      {
+		//	return;
+  //      }
 
         startLaunchPosition = transform.position;
         state = PlayerState.InAir;
@@ -243,9 +252,17 @@ public class PlayerLauncher : MonoBehaviour
 		
 		Vector2 offset = direction * playerRadius * transform.localScale;
 		RaycastHit2D[] hits = Physics2D.RaycastAll(startPosition + offset, direction, distance - playerRadius, 1 << 3);
-		hits = hits.Where(x => x.collider.gameObject != currentPlatform?.gameObject).OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
+   //     hits = hits.Where(x => { 
+			//if (x.collider.GetComponent<RopePlatform>() != null)
+   //         {
+			//	return x.collider.gameObject != currentPlatform?.gameObject;
 
-		if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
+   //         }
+			//return true;
+			//}).OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
+        hits = hits.OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
+
+        if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
 		{
 			return hits;
 		}
