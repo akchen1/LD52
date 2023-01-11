@@ -207,8 +207,7 @@ public class PlayerLauncher : MonoBehaviour
 		// Set player to trigger, Ignore all collision
 
 		Platform platform = nextPlatform?.GetComponent<Platform>();
-		Debug.Log(currentPlatform.name);
-		Debug.Log(platform?.name);
+
 		if (platform?.GetComponent<RopePlatform>() != null && currentPlatform.gameObject == platform.gameObject)
         {
 			return;
@@ -217,15 +216,11 @@ public class PlayerLauncher : MonoBehaviour
 		launchDirection = mouseDirection.normalized;
 		coll.isTrigger = true;
 		expectedPlatform = platform;
-		//if (expectedPlatform == currentPlatform)
-  //      {
-		//	return;
-  //      }
 
         startLaunchPosition = transform.position;
         state = PlayerState.InAir;
 
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, mouseDirection);
+        Quaternion rot = Quaternion.FromToRotation(Vector3.down, mouseDirection);
 		child.transform.rotation = rot;
 	}
 	private Vector3 GetMouseWorldPosition()
@@ -252,14 +247,6 @@ public class PlayerLauncher : MonoBehaviour
 		
 		Vector2 offset = direction * playerRadius * transform.localScale;
 		RaycastHit2D[] hits = Physics2D.RaycastAll(startPosition + offset, direction, distance - playerRadius, 1 << 3);
-   //     hits = hits.Where(x => { 
-			//if (x.collider.GetComponent<RopePlatform>() != null)
-   //         {
-			//	return x.collider.gameObject != currentPlatform?.gameObject;
-
-   //         }
-			//return true;
-			//}).OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
         hits = hits.OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
 
         if (hits.Length > 0)    // We hit a wall that isn't the one we are already on

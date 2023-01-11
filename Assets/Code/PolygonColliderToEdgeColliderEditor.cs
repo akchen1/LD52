@@ -54,7 +54,7 @@ public class PolygonColliderToEdgeColliderEditor : EditorWindow
 			points.Add(points[0]);
 			edge.points = points.ToArray();
 			DestroyImmediate(outerTempCollider);
-			outerObject.GetComponent<Platform>().platformCollider = edge;
+			//outerObject.GetComponent<Platform>().platformCollider = edge;
 
 			points = innerTempCollider.points.ToList();
 			edge = innerTempCollider.gameObject.GetComponent<EdgeCollider2D>();

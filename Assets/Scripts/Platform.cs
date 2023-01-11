@@ -5,9 +5,14 @@ using System.Linq;
 
 public class Platform : MonoBehaviour
 {
-	public Collider2D platformCollider;
+	private Collider2D platformCollider;
 
-	public Vector2 GetClosestEdge(Vector2 point)
+    private void Start()
+    {
+		platformCollider = GetComponent<Collider2D>();
+    }
+
+    public Vector2 GetClosestEdge(Vector2 point)
 	{
 
 		Vector2 p = platformCollider.ClosestPoint(point);
