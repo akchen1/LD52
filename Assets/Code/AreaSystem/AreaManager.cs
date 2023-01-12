@@ -9,6 +9,7 @@ public class AreaManager : MonoBehaviour
 	[SerializeField] private Transform a0Spawn;
 	[SerializeField] private SpriteRenderer a0Sprite;   // used for temporary solution to enable/disable spawn area for area 5-6 transiton
 	[SerializeField] private SpriteRenderer a0CoverBlock;
+	[SerializeField] private List<GameObject> a0Fog;
 
 	[SerializeField, Header("Area 1")] private List<Collider2D> a1Colliders;
 	[SerializeField] private Lantern a1Lantern;
@@ -16,6 +17,7 @@ public class AreaManager : MonoBehaviour
 	[SerializeField] private Transform a1Spawn;
 	[SerializeField] private Parallax a1Background;
 	[SerializeField] private List<GameObject> a1Fog;
+
 
 	[SerializeField, Header("Area 2")] private List<Collider2D> a2Colliders;
 	[SerializeField] private Lantern a2Lantern;
@@ -142,6 +144,7 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(9, a9Background);
 
 		//Add fogs to dictionary
+		fogsDict.Add(0, a0Fog);
 		fogsDict.Add(1, a1Fog);
 		fogsDict.Add(2, a2Fog);
 		fogsDict.Add(3, a3Fog);
@@ -191,12 +194,10 @@ public class AreaManager : MonoBehaviour
 
 		CheckExceptions(newArea);
 
-
 		foreach (GameObject GO in fogsDict[currentArea])
 		{
 			GO.SetActive(true);
 		}
-
 		//Enable new camera and disable old one
 		if (camerasDict[newArea] != camerasDict[currentArea]){
 			camerasDict[newArea].SetActive(true);
