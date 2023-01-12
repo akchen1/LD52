@@ -128,15 +128,17 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(7, a7Background);
 		backgroundDict.Add(8, a8Background);
 		backgroundDict.Add(9, a9Background);
-	
+
 		currentArea = 0;
-		//EnterArea(6);
+		StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
 	}
 	public bool AddSoulToLantern()
 	{
 		// Check if area exists in dictionary
 		if (lanternsDict.ContainsKey(currentArea))
 		{
+			AudioSystem.Instance.PlaySFX("LanternCollected");
+
 			// Add souls and check if filled
 			if (lanternsDict[currentArea].AddSoul())
 			{
@@ -164,19 +166,62 @@ public class AreaManager : MonoBehaviour
 		}
 
 		//Enable new camera and disable old one
-		if(camerasDict[newArea] != camerasDict[currentArea]){
+		if (camerasDict[newArea] != camerasDict[currentArea])
+		{
 			camerasDict[newArea].SetActive(true);
 			camerasDict[currentArea].SetActive(false);
-        }
+		}
 
 
 		if (backgroundDict[newArea] != backgroundDict[currentArea])
-        {
-			Debug.Log("enable " + newArea);
-			Debug.Log("disable " + currentArea);
+		{
 			backgroundDict[newArea]?.EnableParallax(newArea);
 			backgroundDict[currentArea]?.DeactivateParallax(currentArea);
 
+		}
+
+		switch (newArea)
+		{
+			case 0:
+			case 1:
+			case 2:
+				if (currentArea != 0 && currentArea != 1 && currentArea != 2)
+				{
+					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
+				}
+				break;
+
+			case 3:
+			case 4:
+				if (currentArea != 3 && currentArea != 4)
+				{
+					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeB"));
+				}
+				break;
+
+			case 5:
+			case 6:
+				if (currentArea != 5 && currentArea != 6)
+				{
+					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeC"));
+				}
+				break;
+
+			case 7:
+				if (currentArea != 7)
+				{
+					AudioSystem.Instance.PlayThemeD();
+				}
+				break;
+
+			case 8:
+			case 9:
+				if (currentArea != 8 && currentArea != 9)
+				{
+					AudioSystem.Instance.PlayVineEnd();
+					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeE"));
+				}
+				break;
 		}
 
 		currentArea = newArea;
@@ -190,6 +235,8 @@ public class AreaManager : MonoBehaviour
 		{
 			coll.enabled = false;
 		}
+
+		AudioSystem.Instance.PlaySFX("LanternCompleted");
 	}
 
 	public Lantern? GetCurrentLantern()

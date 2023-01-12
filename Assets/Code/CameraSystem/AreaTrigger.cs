@@ -14,7 +14,8 @@ public class AreaTrigger : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if(areaManager.GetCurrentArea() != Area){
+		if (areaManager.GetCurrentArea() != Area)
+		{
 			if (other.gameObject.tag == "Player")
 			{
 				areaManager.EnterArea(Area);

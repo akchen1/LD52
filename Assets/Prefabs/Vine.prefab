@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 6739944936721082766}
-  attackLength: 5
+  attackLength: 3
   attackCooldown: 3
 --- !u!70 &6739944936721082764
 CapsuleCollider2D:
@@ -220,6 +220,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 22, y: 31.001953}
+  m_Offset: {x: 0.7324016, y: -6.075644}
+  m_Size: {x: 18.33802, y: 18.8507}
   m_Direction: 0

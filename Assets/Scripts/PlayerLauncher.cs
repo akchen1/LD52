@@ -11,7 +11,7 @@ public class PlayerLauncher : MonoBehaviour
 	private AimController AC;
 	private Collider2D coll;
 	private Animator animator;
-	private float radius;	// launch radius
+	private float radius;   // launch radius
 	private Vector2 moveDir;
 
 	// Set to the current platform the player is on
@@ -31,7 +31,7 @@ public class PlayerLauncher : MonoBehaviour
 	private Platform expectedPlatform;
 	private Vector2 normal;
 
-	private float directionScale;	// Keeps the player moving in the same direction if holding down a key
+	private float directionScale;   // Keeps the player moving in the same direction if holding down a key
 
 	[SerializeField] private GameObject child;
 	float playerRadius;
@@ -58,23 +58,23 @@ public class PlayerLauncher : MonoBehaviour
 		//Debug.DrawRay(transform.position, child.transform.right, Color.red);
 		//Debug.DrawRay(transform.position, child.transform.up, Color.green);
 
-		
+
 	}
 
 	private void RotateChild()
-    {
-        if (state != PlayerState.InPlatform) return;
-        normal = currentPlatform.GetClosestEdge(transform.position);
+	{
+		if (state != PlayerState.InPlatform) return;
+		normal = currentPlatform.GetClosestEdge(transform.position);
 
 		float angle = Vector2.SignedAngle(Vector2.down, normal);
 		child.transform.eulerAngles = new Vector3(0, 0, angle);
 
 
-        Vector3 childScale = child.transform.localScale;
+		Vector3 childScale = child.transform.localScale;
 		childScale.x = Mathf.Sign(-moveDir.x) * Mathf.Sign(normal.y);
-		
+
 		child.transform.localScale = childScale;
-    }
+	}
 
 	private void SetAnimation()
 	{
@@ -91,12 +91,12 @@ public class PlayerLauncher : MonoBehaviour
 		Vector2 move = transform.position;
 		moveDir = Vector2.zero;
 		float speed = 0;
-		int normalScale = 1;	// scales the up direction depending if going left or right
+		int normalScale = 1;    // scales the up direction depending if going left or right
 
 		if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
 		{
-            directionScale = Mathf.Sign(-normal.y);
-        }
+			directionScale = Mathf.Sign(-normal.y);
+		}
 
 		if (Input.GetKey(KeyCode.A))
 		{
@@ -111,10 +111,10 @@ public class PlayerLauncher : MonoBehaviour
 		moveDir = directionScale * (Vector2)child.transform.right * speed;
 
 		Vector2 trueDirection = moveDir + ((Vector2)child.transform.up * speed * normalScale);
-	
-		move +=  trueDirection;
 
-        PlayerRigidbody.MovePosition(move);
+		move += trueDirection;
+
+		PlayerRigidbody.MovePosition(move);
 		animator.SetFloat("Horizontal", move.x);
 		animator.SetFloat("Vertical", move.y);
 		animator.SetBool("isMoving", moveDir.magnitude > 0);
@@ -137,12 +137,12 @@ public class PlayerLauncher : MonoBehaviour
 		Vector2 direction = (expectedPosition - transform.position).normalized;
 		float distance = Vector2.Distance(expectedPosition, transform.position);
 
-		if (distance >= 0.1f)	// Did not arrive at expected position
-        {
+		if (distance >= 0.1f)   // Did not arrive at expected position
+		{
 			PlayerRigidbody.velocity = direction.normalized * 10f;
 
 			return;
-        } 
+		}
 
 		PlayerRigidbody.velocity = Vector2.zero;
 
@@ -168,6 +168,7 @@ public class PlayerLauncher : MonoBehaviour
 		SetAnimation();
 		PlayerRigidbody.velocity = Vector3.zero;
 		PlayerRigidbody.angularVelocity = 0;
+		AudioSystem.Instance.PlaySFX("FoxDeath");
 
 		StartCoroutine(PlayerRespawn());
 	}
@@ -175,11 +176,11 @@ public class PlayerLauncher : MonoBehaviour
 	private IEnumerator Land()
 	{
 		if (currentPlatform.GetComponent<RopePlatform>() != null)
-        {
+		{
 			//Vector2 direction = transform.position - ;
-            ApplyForce(currentPlatform, launchDirection.normalized);
+			ApplyForce(currentPlatform, launchDirection.normalized);
 
-        }
+		}
 		// wait for land animation 3 frames / 8 fps + transition animation 3 frames / 8 fps
 		yield return new WaitForSeconds(3f / 8f - 0.1f);
 		state = PlayerState.LandingTransition;
@@ -205,29 +206,32 @@ public class PlayerLauncher : MonoBehaviour
 		// Normalize the direction and scale it by the launch force
 		mouseDirection = mouseDirection.normalized;
 
-		
+
 		GameObject nextPlatform = CalculateExpectedPosition(transform.position, mouseDirection, radius, false);
 		if (currentPlatform.gameObject == nextPlatform?.gameObject && Vector3.Distance(expectedPosition, transform.position) <= 1f)
-        {
+		{
 			return;
-        }
+		}
 
-        Platform platform = nextPlatform?.GetComponent<Platform>();
+		Platform platform = nextPlatform?.GetComponent<Platform>();
 		if (platform?.GetComponent<RopePlatform>() != null && currentPlatform.gameObject == platform.gameObject)
-        {
+		{
 			return;
-        }
+		}
 		maxLaunchPosition = transform.position + (Vector3)mouseDirection * radius;
 		launchDirection = mouseDirection.normalized;
 		coll.isTrigger = true;
 		expectedPlatform = platform;
 
-        startLaunchPosition = transform.position;
-        state = PlayerState.InAir;
+		startLaunchPosition = transform.position;
+		state = PlayerState.InAir;
 
-        Quaternion rot = Quaternion.FromToRotation(Vector3.down, mouseDirection);
+		Quaternion rot = Quaternion.FromToRotation(Vector3.down, mouseDirection);
 		child.transform.rotation = rot;
+
+		AudioSystem.Instance.PlaySFX("FoxDash");
 	}
+
 	private Vector3 GetMouseWorldPosition()
 	{
 		// Get the position of the mouse click
@@ -238,44 +242,44 @@ public class PlayerLauncher : MonoBehaviour
 	}
 
 	private void ApplyForce(Platform platform, Vector2 direction)
-    {
+	{
 		if (platform == null) return;
 		Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();
 		if (rb == null) return;
-        rb.AddForce(direction * 100, ForceMode2D.Impulse);
-    }
+		rb.AddForce(direction * 100, ForceMode2D.Impulse);
+	}
 
 
 	private RaycastHit2D[] CalculateNextPlatform(Vector2 startPosition, Vector2 direction, float distance, bool checkIfSame)
 	{
 		// Calculated expected position
-		
+
 		Vector2 offset = direction * playerRadius * transform.localScale;
 		RaycastHit2D[] hits = Physics2D.RaycastAll(startPosition + offset, direction, distance - playerRadius, 1 << 3);
-        hits = hits
-            .Where(x =>
-            {
+		hits = hits
+			.Where(x =>
+			{
 				if (checkIfSame)
-                {
+				{
 					return x.collider.gameObject != currentPlatform?.gameObject && currentPlatform?.gameObject != expectedPlatform?.gameObject;
 				}
 				return true;
-            })
-            .OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
+			})
+			.OrderBy(x => Vector3.Distance(startPosition, x.point)).ToArray();
 
-        if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
+		if (hits.Length > 0)    // We hit a wall that isn't the one we are already on
 		{
 			return hits;
 		}
-		
+
 		return null;
 	}
 
 	private GameObject CalculateExpectedPosition(Vector2 startPosition, Vector2 direction, float distance, bool checkIfSame)
-    {
+	{
 		RaycastHit2D[] hits = CalculateNextPlatform(startPosition, direction, distance, checkIfSame);
 		if (hits != null)
-        {
+		{
 
 			expectedPosition = hits[0].point - direction * 0.1f;
 			return hits[0].collider.gameObject;

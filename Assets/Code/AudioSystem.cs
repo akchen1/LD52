@@ -16,16 +16,22 @@ public class AudioSystem : MonoBehaviour
 	[SerializeField] private AudioClip themeD;
 	[SerializeField] private AudioClip themeDIntro;
 	[SerializeField] private AudioClip themeE;
+	[SerializeField] private float musicVolume;
 
 	[Header("SFX"), SerializeField] private AudioClip foxDash;
 	[SerializeField] private AudioClip foxDeath;
 	[SerializeField] private AudioClip birdDeath;
-	[SerializeField] private AudioClip lanternCollect;
 	[SerializeField] private AudioClip lanternCompleted;
 	[SerializeField] private AudioClip waterRockSplash;
 	[SerializeField] private AudioClip waterFoxSplash;
+	[SerializeField] private AudioClip lanternCollected;
+	[SerializeField] private AudioClip vineChaseStart;
+	[SerializeField] private AudioClip vineChase;
+	[SerializeField] private AudioClip vineEnd;
+	[SerializeField] private AudioClip vineBurst;
 
-	[Header("General"), SerializeField] private float fadeTime;
+
+	[Header("General"), SerializeField] private float fadeSpeed;
 
 	private Dictionary<string, AudioClip> music = new Dictionary<string, AudioClip>();
 	private Dictionary<string, AudioClip> sfx = new Dictionary<string, AudioClip>();
@@ -51,12 +57,16 @@ public class AudioSystem : MonoBehaviour
 
 		/// Add sfx to sfx dictionary
 		sfx.Add("FoxDash", foxDash);
-		sfx.Add("foxDeath", foxDeath);
-		sfx.Add("birdDeath", birdDeath);
-		sfx.Add("lanternCollect", lanternCollect);
-		sfx.Add("lanternCompleted", lanternCompleted);
-		sfx.Add("waterRockSplash", waterRockSplash);
-		sfx.Add("waterFoxSplash", waterFoxSplash);
+		sfx.Add("FoxDeath", foxDeath);
+		sfx.Add("BirdDeath", birdDeath);
+		sfx.Add("LanternCompleted", lanternCompleted);
+		sfx.Add("WaterRockSplash", waterRockSplash);
+		sfx.Add("WaterFoxSplash", waterFoxSplash);
+		sfx.Add("LanternCollected", lanternCollected);
+		sfx.Add("VineChaseStart", vineChaseStart);
+		sfx.Add("VineChase", vineChase);
+		sfx.Add("VineEnd", vineEnd);
+		sfx.Add("VineBurst", vineBurst);
 	}
 
 	public void PlaySFX(string name)
@@ -83,34 +93,44 @@ public class AudioSystem : MonoBehaviour
 		}
 	}
 
-	private IEnumerator ChangeMusic(string name)
+	public IEnumerator ChangeMusic(string name)
 	{
-		float elapsedTime = 0f;
-		float normalizedTime = 0f;
-
-		while (elapsedTime < fadeTime)
+		while (MusicSource.volume > 0)
 		{
-			elapsedTime += Time.deltaTime;
-			normalizedTime = elapsedTime / fadeTime;
-
-			MusicSource.volume = 1 - normalizedTime;
-
+			MusicSource.volume -= fadeSpeed * Time.deltaTime;
 			yield return null;
 		}
 
 		PlayMusic(name);
 
-		elapsedTime = 0f;
-		normalizedTime = 0f;
-		while (elapsedTime < fadeTime)
+		while (MusicSource.volume < musicVolume)
 		{
-			elapsedTime += Time.deltaTime;
-			normalizedTime = elapsedTime / fadeTime;
-
-			MusicSource.volume = normalizedTime;
-
+			MusicSource.volume += fadeSpeed * Time.deltaTime;
 			yield return null;
 		}
+	}
+
+	public void PlayVineChase()
+	{
+		PlaySFX("VineChaseStart");
+
+		StartCoroutine(PlayVineChaseLoop());
+	}
+
+	public void PlayVineEnd()
+	{
+		SfxSource.Stop();
+		SfxSource.loop = false;
+		PlaySFX("VineEnd");
+	}
+
+	private IEnumerator PlayVineChaseLoop()
+	{
+		yield return new WaitForSeconds(music["VineChaseStart"].length);
+
+		SfxSource.clip = sfx["VineChase"];
+		SfxSource.loop = true;
+		SfxSource.Play();
 	}
 
 	public void PlayThemeD()

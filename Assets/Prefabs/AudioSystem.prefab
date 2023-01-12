@@ -48,20 +48,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SfxSource: {fileID: 8609705006498609411}
   MusicSource: {fileID: 8609705006498609408}
-  themeA: {fileID: 0}
+  themeA: {fileID: 8300000, guid: 0e29118bcffad034f8563f6c10f37e50, type: 3}
   themeB: {fileID: 8300000, guid: 7553a0ee5b9fe874683790340c0b0015, type: 3}
   themeC: {fileID: 8300000, guid: b9b1f35b0bc10034cac3689a3b54a421, type: 3}
   themeD: {fileID: 8300000, guid: 5e41251ff1f581a49ae0390c83371658, type: 3}
   themeDIntro: {fileID: 8300000, guid: afa17ff7c2bde7147bc8cce7217316da, type: 3}
   themeE: {fileID: 8300000, guid: bfed6e903db74d949a09be0d9ffc25c2, type: 3}
+  musicVolume: 0.25
   foxDash: {fileID: 8300000, guid: 03a81b9b7d17d2745b75d470d79bd73a, type: 3}
   foxDeath: {fileID: 8300000, guid: 03d53bd3ee1b69042b9c4bdedaca9f42, type: 3}
   birdDeath: {fileID: 8300000, guid: e3b9c86295e479a45a91d4f60c54e3a0, type: 3}
-  lanternCollect: {fileID: 0}
   lanternCompleted: {fileID: 8300000, guid: 551c1de5f772d8942a5ed75e32ec1d68, type: 3}
-  waterRockSplash: {fileID: 0}
-  waterFoxSplash: {fileID: 0}
-  fadeTime: 0
+  waterRockSplash: {fileID: 8300000, guid: 7033d48fc46f57f48813f3bc6e5cfaa4, type: 3}
+  waterFoxSplash: {fileID: 8300000, guid: a580b47a09d62234ebc904bbf37ba27c, type: 3}
+  lanternCollected: {fileID: 8300000, guid: 3b9959649a8ff2c45a76478c02c5cd07, type: 3}
+  vineChaseStart: {fileID: 8300000, guid: 56d93176e3722c9438b138e0480e51e3, type: 3}
+  vineChase: {fileID: 8300000, guid: 6d7e9c5e506882b4b8de7274d343f50d, type: 3}
+  vineEnd: {fileID: 8300000, guid: f2f038166ad6d0641bb9d7f72f22e1f3, type: 3}
+  vineBurst: {fileID: 8300000, guid: 70972e4faf0ca3048919c70b8d0f7d3f, type: 3}
+  fadeSpeed: 0.2
 --- !u!82 &8609705006498609411
 AudioSource:
   m_ObjectHideFlags: 0
@@ -74,7 +79,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -170,7 +175,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
