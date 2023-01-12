@@ -156,8 +156,13 @@ public class AreaManager : MonoBehaviour
 		fogsDict.Add(9, a9Fog);
 
 		currentArea = 0;
+	}
+
+    private void Start()
+    {
 		StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
 	}
+
 	public bool AddSoulToLantern()
 	{
 		// Check if area exists in dictionary
