@@ -8,6 +8,8 @@ public class AreaManager : MonoBehaviour
 	[SerializeField, Header("Area 0")] private List<Collider2D> a0Colliders;
 	[SerializeField] private GameObject a0Camera;
 	[SerializeField] private Transform a0Spawn;
+	[SerializeField] private SpriteRenderer a0Sprite;   // used for temporary solution to enable/disable spawn area for area 5-6 transiton
+	[SerializeField] private SpriteRenderer a0CoverBlock;
 
 	[SerializeField, Header("Area 1")] private List<Collider2D> a1Colliders;
 	[SerializeField] private Lantern a1Lantern;
@@ -59,6 +61,8 @@ public class AreaManager : MonoBehaviour
 	[SerializeField] private GameObject a9Camera;
 	[SerializeField] private Transform a9Spawn;
 	[SerializeField] private Parallax a9Background;
+
+	[SerializeField] private SpriteRenderer spawnCoverBlock;
 
 	private Dictionary<int, List<Collider2D>> collidersDict = new Dictionary<int, List<Collider2D>>();
 	private Dictionary<int, Lantern> lanternsDict = new Dictionary<int, Lantern>();
@@ -163,8 +167,10 @@ public class AreaManager : MonoBehaviour
 			coll.enabled = true;
 		}
 
+		CheckExceptions(newArea);
+
 		//Enable new camera and disable old one
-		if(camerasDict[newArea] != camerasDict[currentArea]){
+		if (camerasDict[newArea] != camerasDict[currentArea]){
 			camerasDict[newArea].SetActive(true);
 			camerasDict[currentArea].SetActive(false);
         }
@@ -172,11 +178,8 @@ public class AreaManager : MonoBehaviour
 
 		if (backgroundDict[newArea] != backgroundDict[currentArea])
         {
-			Debug.Log("enable " + newArea);
-			Debug.Log("disable " + currentArea);
-			backgroundDict[newArea]?.EnableParallax(newArea);
-			backgroundDict[currentArea]?.DeactivateParallax(currentArea);
-
+            backgroundDict[currentArea]?.DeactivateParallax();
+            backgroundDict[newArea]?.EnableParallax(newArea);
 		}
 
 		currentArea = newArea;
@@ -223,5 +226,28 @@ public class AreaManager : MonoBehaviour
 	public int GetCurrentArea()
 	{
 		return currentArea;
+	}
+
+	private void CheckExceptions(int newArea)
+    {
+		if ((currentArea == 5 && newArea == 6) || (currentArea == 6 && newArea == 5))
+		{
+			spawnCoverBlock.enabled = true;
+			a0Sprite.enabled = false;
+
+		}
+		else
+		{
+			spawnCoverBlock.enabled = false;
+			a0Sprite.enabled = true;
+		}
+
+		if ((currentArea == 0 && newArea == 1) || (currentArea == 1 && newArea == 0))
+        {
+			a0CoverBlock.enabled = true;
+        } else
+        {
+			a0CoverBlock.enabled = false;
+        }
 	}
 }

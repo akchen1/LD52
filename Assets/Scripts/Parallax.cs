@@ -1,28 +1,24 @@
 using UnityEngine;
+using System;
+using System.Collections;
 using System.Linq;
-
+using Cinemachine;
 public class Parallax : MonoBehaviour
 {
     public Transform background;
     public GameObject mainCamera;
-    public GameObject areaCamera;
     [SerializeField] private int[] AreaIds;
     [SerializeField] private bool[] isXs;
     [SerializeField] private bool[] isYs;
 
     private Vector2 offset;
     [SerializeField] private bool parallaxActive;
-    [SerializeField] private bool isX;
-    [SerializeField] private bool isY;
-    bool isInArea;
-    private int currentArea;
+
+    private int currentAreaIndex;
+    CinemachineBrain CinemachineBrain;
     private void Start()
     {
-        if (parallaxActive)
-            offset = background.position - mainCamera.transform.position;
-        isInArea = false;
-        //offset = background.position - areaCamera.transform.position;
-
+        CinemachineBrain = FindObjectOfType<CinemachineBrain>();
     }
 
     private void Update()
@@ -30,12 +26,12 @@ public class Parallax : MonoBehaviour
         if (!parallaxActive) return;
 
         Vector2 position = background.position;
-        if (isXs[IsMyArea(currentArea)])
+        if (isXs[currentAreaIndex])
         {
             position.x = mainCamera.transform.position.x + offset.x;
             
         }
-        if (isYs[IsMyArea(currentArea)])
+        if (isYs[currentAreaIndex])
             position.y = mainCamera.transform.position.y + offset.y;
 
         background.position = position;
@@ -43,26 +39,26 @@ public class Parallax : MonoBehaviour
 
     public void EnableParallax(int area)
     {
-        if (IsMyArea(area) < 0) return;
-        parallaxActive = true;
-        currentArea = area;
+        if (GetAreaIndex(area) < 0) return;
+        StartCoroutine(WaitForTransition());
+        currentAreaIndex = GetAreaIndex(area);
         
     }
 
-    public void DeactivateParallax(int area)
+    public void DeactivateParallax()
     {
         parallaxActive = false;
-        isInArea = false;
     }
 
-    private int IsMyArea(int area)
+    private int GetAreaIndex(int area)
     {
-        int index = AreaIds.ToList().IndexOf(area);
-        return index;
-        //if (AreaIds.Select(x => x == area) != null)
-        //{
-        //    return true;
-        //}
-        //return false;
+        return AreaIds.ToList().IndexOf(area);
+    }
+
+    private IEnumerator WaitForTransition()
+    {
+        yield return 0; // wait for next frame for cinemachine to update
+        yield return new WaitUntil(() => !CinemachineBrain.IsBlending);
+        parallaxActive = true;
     }
 }
