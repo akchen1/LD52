@@ -62,5 +62,11 @@ public class Lantern : MonoBehaviour
 		gameObject.GetComponent<Animator>().enabled = true;
 	}
 
+	public bool AreaCleared()
+	{
+		return CurrentSouls >= MaxSouls;
+	}
+
+
 
 }

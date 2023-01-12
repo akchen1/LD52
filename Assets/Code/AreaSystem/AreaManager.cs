@@ -196,10 +196,11 @@ public class AreaManager : MonoBehaviour
 		{
 			coll.enabled = true;
 		}
-
-		foreach (GameObject GO in fogsDict[newArea])
-		{
-			GO.SetActive(true);
+		if(!lanternsDict[newArea].AreaCleared()){
+			foreach (GameObject GO in fogsDict[newArea])
+			{
+				GO.SetActive(true);
+			}
 		}
 
 		CheckExceptions(newArea);
@@ -311,7 +312,6 @@ public class AreaManager : MonoBehaviour
 		{
 			StartCoroutine(Fade(GO));
 		}
-		fogsDict[currentArea].Clear();
 
 	}
     public IEnumerator Fade(GameObject GO)
@@ -329,7 +329,7 @@ public class AreaManager : MonoBehaviour
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha); // set new alpha value
             yield return null; // wait for next frame
         }
-        Destroy(GO); // destroy the game object
+		GO.SetActive(false);
     }
 
 	public int GetCurrentArea()
