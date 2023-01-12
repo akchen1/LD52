@@ -248,10 +248,27 @@ public class AreaManager : MonoBehaviour
 	{
 		foreach (GameObject GO in fogsDict[currentArea])
 		{
-			Destroy(GO);
+			StartCoroutine(Fade(GO));
 		}
 
 	}
+    public IEnumerator Fade(GameObject GO)
+    {
+
+        SpriteRenderer sr = GO.GetComponent<SpriteRenderer>(); // get the sprite renderer component
+        float startAlpha = sr.color.a; // get the starting alpha value
+		float fadeTime = 2.0f;
+        float t = 0f; // time passed
+
+        while (t < 2.0f)
+        {
+            t += Time.deltaTime; // increment time passed
+            float alpha = Mathf.Lerp(startAlpha, 0f, t / fadeTime); // calculate new alpha value
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha); // set new alpha value
+            yield return null; // wait for next frame
+        }
+        Destroy(GO); // destroy the game object
+    }
 
 	public int GetCurrentArea()
 	{
