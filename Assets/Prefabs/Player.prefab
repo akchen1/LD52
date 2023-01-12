@@ -209,7 +209,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 6789367287515676381}
   Arrow: {fileID: 6789367288067378470}
-  CircleOutline: {fileID: 6789367287774929082}
 --- !u!1 &6789367287543325750
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6789367287774929083
 Transform:
   m_ObjectHideFlags: 0

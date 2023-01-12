@@ -4,66 +4,80 @@ using UnityEngine;
 
 public class AreaManager : MonoBehaviour
 {
-	public int StartArea;
 	[SerializeField, Header("Area 0")] private List<Collider2D> a0Colliders;
 	[SerializeField] private GameObject a0Camera;
 	[SerializeField] private Transform a0Spawn;
+	[SerializeField] private SpriteRenderer a0Sprite;   // used for temporary solution to enable/disable spawn area for area 5-6 transiton
+	[SerializeField] private SpriteRenderer a0CoverBlock;
+	[SerializeField] private List<GameObject> a0Fog;
 
 	[SerializeField, Header("Area 1")] private List<Collider2D> a1Colliders;
 	[SerializeField] private Lantern a1Lantern;
 	[SerializeField] private GameObject a1Camera;
 	[SerializeField] private Transform a1Spawn;
 	[SerializeField] private Parallax a1Background;
+	[SerializeField] private List<GameObject> a1Fog;
+
 
 	[SerializeField, Header("Area 2")] private List<Collider2D> a2Colliders;
 	[SerializeField] private Lantern a2Lantern;
 	[SerializeField] private GameObject a2Camera;
 	[SerializeField] private Transform a2Spawn;
 	[SerializeField] private Parallax a2Background;
+	[SerializeField] private List<GameObject> a2Fog;
 
 	[SerializeField, Header("Area 3")] private List<Collider2D> a3Colliders;
 	[SerializeField] private Lantern a3Lantern;
 	[SerializeField] private GameObject a3Camera;
 	[SerializeField] private Transform a3Spawn;
 	[SerializeField] private Parallax a3Background;
+	[SerializeField] private  List<GameObject> a3Fog;
 
 	[SerializeField, Header("Area 4")] private List<Collider2D> a4Colliders;
 	[SerializeField] private Lantern a4Lantern;
 	[SerializeField] private GameObject a4Camera;
 	[SerializeField] private Transform a4Spawn;
 	[SerializeField] private Parallax a4Background;
+	[SerializeField] private  List<GameObject> a4Fog;
 
 	[SerializeField, Header("Area 5")] private List<Collider2D> a5Colliders;
 	[SerializeField] private Lantern a5Lantern;
 	[SerializeField] private GameObject a5Camera;
 	[SerializeField] private Transform a5Spawn;
 	[SerializeField] private Parallax a5Background;
-
+	[SerializeField] private  List<GameObject> a5Fog;
 	[SerializeField, Header("Area 6")] private List<Collider2D> a6Colliders;
 	[SerializeField] private Lantern a6Lantern;
 	[SerializeField] private GameObject a6Camera;
 	[SerializeField] private Transform a6Spawn;
 	[SerializeField] private Parallax a6Background;
+	[SerializeField] private  List<GameObject> a6Fog;
 	[SerializeField, Header("Area 7")] private List<Collider2D> a7Colliders;
 	[SerializeField] private Lantern a7Lantern;
 	[SerializeField] private GameObject a7Camera;
 	[SerializeField] private Transform a7Spawn;
 	[SerializeField] private Parallax a7Background;
+	[SerializeField] private  List<GameObject> a7Fog;
 	[SerializeField, Header("Area 8")] private List<Collider2D> a8Colliders;
 	[SerializeField] private Lantern a8Lantern;
 	[SerializeField] private GameObject a8Camera;
 	[SerializeField] private Transform a8Spawn;
 	[SerializeField] private Parallax a8Background;
+	[SerializeField] private  List<GameObject> a8Fog;
 	[SerializeField, Header("Area 9")] private List<Collider2D> a9Colliders;
 	[SerializeField] private Lantern a9Lantern;
 	[SerializeField] private GameObject a9Camera;
 	[SerializeField] private Transform a9Spawn;
 	[SerializeField] private Parallax a9Background;
+	[SerializeField] private List<GameObject> a9Fog;
+
+	[SerializeField] private SpriteRenderer spawnCoverBlock;
 
 	private Dictionary<int, List<Collider2D>> collidersDict = new Dictionary<int, List<Collider2D>>();
 	private Dictionary<int, Lantern> lanternsDict = new Dictionary<int, Lantern>();
 	private Dictionary<int, GameObject> camerasDict = new Dictionary<int, GameObject>();
 	private Dictionary<int, Transform> spawnsDict = new Dictionary<int, Transform>();
+	private Dictionary<int, List<GameObject>> fogsDict = new Dictionary<int, List<GameObject>>();
 	private Dictionary<int, Parallax> backgroundDict = new Dictionary<int, Parallax>();
 
 	private int currentArea;
@@ -129,6 +143,23 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(8, a8Background);
 		backgroundDict.Add(9, a9Background);
 
+<<<<<<< HEAD
+=======
+		//Add fogs to dictionary
+		fogsDict.Add(0, a0Fog);
+		fogsDict.Add(1, a1Fog);
+		fogsDict.Add(2, a2Fog);
+		fogsDict.Add(3, a3Fog);
+		fogsDict.Add(4, a4Fog);
+		fogsDict.Add(5, a5Fog);
+		fogsDict.Add(6, a6Fog);
+		fogsDict.Add(7, a7Fog);
+		fogsDict.Add(8, a8Fog);
+		fogsDict.Add(9, a9Fog);
+
+
+	
+>>>>>>> dcc7c047d3bfb3044a80ebac84be14ca60c8049e
 		currentArea = 0;
 		StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
 	}
@@ -144,6 +175,7 @@ public class AreaManager : MonoBehaviour
 			{
 				// Filled
 				ClearCurrentArea();
+				ClearFog();
 
 				// return true so player can increment their area
 				return true;
@@ -165,19 +197,35 @@ public class AreaManager : MonoBehaviour
 			coll.enabled = true;
 		}
 
+		CheckExceptions(newArea);
+
+		foreach (GameObject GO in fogsDict[currentArea])
+		{
+			GO.SetActive(true);
+		}
 		//Enable new camera and disable old one
+<<<<<<< HEAD
 		if (camerasDict[newArea] != camerasDict[currentArea])
 		{
+=======
+		if (camerasDict[newArea] != camerasDict[currentArea]){
+>>>>>>> dcc7c047d3bfb3044a80ebac84be14ca60c8049e
 			camerasDict[newArea].SetActive(true);
 			camerasDict[currentArea].SetActive(false);
 		}
 
 
 		if (backgroundDict[newArea] != backgroundDict[currentArea])
+<<<<<<< HEAD
 		{
 			backgroundDict[newArea]?.EnableParallax(newArea);
 			backgroundDict[currentArea]?.DeactivateParallax(currentArea);
 
+=======
+        {
+            backgroundDict[currentArea]?.DeactivateParallax();
+            backgroundDict[newArea]?.EnableParallax(newArea);
+>>>>>>> dcc7c047d3bfb3044a80ebac84be14ca60c8049e
 		}
 
 		switch (newArea)
@@ -266,9 +314,57 @@ public class AreaManager : MonoBehaviour
 		Debug.Log("Spawn position not found in area " + currentArea);
 		return null;
 	}
+	private void ClearFog()
+	{
+		foreach (GameObject GO in fogsDict[currentArea])
+		{
+			StartCoroutine(Fade(GO));
+		}
+
+	}
+    public IEnumerator Fade(GameObject GO)
+    {
+
+        SpriteRenderer sr = GO.GetComponent<SpriteRenderer>(); // get the sprite renderer component
+        float startAlpha = sr.color.a; // get the starting alpha value
+		float fadeTime = 2.0f;
+        float t = 0f; // time passed
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime; // increment time passed
+            float alpha = Mathf.Lerp(startAlpha, 0f, t / fadeTime); // calculate new alpha value
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha); // set new alpha value
+            yield return null; // wait for next frame
+        }
+        Destroy(GO); // destroy the game object
+    }
 
 	public int GetCurrentArea()
 	{
 		return currentArea;
+	}
+
+	private void CheckExceptions(int newArea)
+    {
+		if ((currentArea == 5 && newArea == 6) || (currentArea == 6 && newArea == 5))
+		{
+			spawnCoverBlock.enabled = true;
+			a0Sprite.enabled = false;
+
+		}
+		else
+		{
+			spawnCoverBlock.enabled = false;
+			a0Sprite.enabled = true;
+		}
+
+		if ((currentArea == 0 && newArea == 1) || (currentArea == 1 && newArea == 0))
+        {
+			a0CoverBlock.enabled = true;
+        } else
+        {
+			a0CoverBlock.enabled = false;
+        }
 	}
 }

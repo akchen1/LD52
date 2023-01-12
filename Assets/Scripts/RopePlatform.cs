@@ -5,19 +5,15 @@ using UnityEngine;
 public class RopePlatform : MonoBehaviour
 {
     private Rigidbody2D rb;
+    public bool isDestroy;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
             rb.bodyType = RigidbodyType2D.Static;
         }

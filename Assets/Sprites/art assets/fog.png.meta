@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f186a1a52f0da2f4c9f773a2c5b7e07f
+guid: 12c2fbe241db1e341aeed592ed67c29a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 500
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -102,30 +102,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -141,13 +117,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: respawn_0
+      name: fog_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 4085
-        width: 3142
-        height: 817
+        y: 1686
+        width: 633
+        height: 562
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 910ee96d99b5a1944a246cad351bf88c
-      internalID: -2129101765
+      spriteID: 53afe585bca1aa945aa0f3f2cc4265bb
+      internalID: 1513221735
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: respawn_1
+      name: fog_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 3268
-        width: 3142
-        height: 817
+        x: 633
+        y: 1686
+        width: 633
+        height: 562
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,20 +152,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ce45e08823a11324b83dec97b437aac5
-      internalID: -669461998
+      spriteID: 7d06a3e0aa228244ebb9907c03534de2
+      internalID: -1565631257
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: respawn_2
+      name: fog_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 2451
-        width: 3142
-        height: 817
+        x: 1266
+        y: 1686
+        width: 633
+        height: 562
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -197,20 +173,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 553325ee624b4614cbc47413c407877a
-      internalID: 1833177223
+      spriteID: fe8b65675c97c5142bf27e2ff3c3de5e
+      internalID: -1356103725
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: respawn_3
+      name: fog_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 1634
-        width: 3142
-        height: 817
+        y: 1124
+        width: 633
+        height: 562
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,20 +194,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7d4bda9211062b74e96fc91ab646bb14
-      internalID: -1268882729
+      spriteID: 74890519fd0c2754084d6fca27316ae4
+      internalID: -2068726890
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: respawn_4
+      name: fog_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 817
-        width: 3142
-        height: 817
+        x: 633
+        y: 1124
+        width: 633
+        height: 562
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,20 +215,104 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2844164a6c82071438721a9e47c82a36
-      internalID: -1479365481
+      spriteID: 384003572dc214541824fe55115384d7
+      internalID: -343349087
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: respawn_5
+      name: fog_5
+      rect:
+        serializedVersion: 2
+        x: 1266
+        y: 1124
+        width: 633
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba94b028f08d1c146815b96a437ec73d
+      internalID: 301176794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fog_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 562
+        width: 633
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 265ed0a688f88ec46a3640d8c9276bbd
+      internalID: 256060896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fog_7
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 562
+        width: 633
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5c616c81fc76054b93dbd4d544c774f
+      internalID: -967933230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fog_8
+      rect:
+        serializedVersion: 2
+        x: 1266
+        y: 562
+        width: 633
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d42ffc66eea8f549a77672e88bae4bb
+      internalID: 1770946659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fog_9
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 3142
-        height: 817
+        width: 633
+        height: 562
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -260,8 +320,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 828f332ac41c816429bb3313dcd56851
-      internalID: -1538090397
+      spriteID: b57d9dc5261e7df45ae26bb1e6a285bc
+      internalID: -543989214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fog_10
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 0
+        width: 633
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2c79b0619d6e69449d0e90fd8f57e35
+      internalID: 1217151786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fog_11
+      rect:
+        serializedVersion: 2
+        x: 1266
+        y: 0
+        width: 633
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38e4d13d5f8bd904b9599d73de636ab2
+      internalID: -1422587888
       vertices: []
       indices: 
       edges: []
@@ -277,12 +379,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      respawn_2: 1833177223
-      respawn_4: -1479365481
-      respawn_5: -1538090397
-      respawn_3: -1268882729
-      respawn_1: -669461998
-      respawn_0: -2129101765
+      fog_11: -1422587888
+      fog_8: 1770946659
+      fog_3: -2068726890
+      fog_0: 1513221735
+      fog_7: -967933230
+      fog_10: 1217151786
+      fog_9: -543989214
+      fog_1: -1565631257
+      fog_2: -1356103725
+      fog_6: 256060896
+      fog_4: -343349087
+      fog_5: 301176794
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
