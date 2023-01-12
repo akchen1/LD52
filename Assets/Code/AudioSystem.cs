@@ -90,6 +90,7 @@ public class AudioSystem : MonoBehaviour
 			// Play new music
 			MusicSource.clip = music[name];
 			MusicSource.Play();
+			MusicSource.loop = true;
 		}
 	}
 
