@@ -6,6 +6,8 @@ public class ChasingVineController : MonoBehaviour
 {
 	[SerializeField] private GameObject chasingVineSpawn;
 	[SerializeField] private GameObject chasingVine;
+	[SerializeField] private Respawn respawn;	
+	[SerializeField] private Respawn newRespawn;
 	[SerializeField] private float maxX;
 	[SerializeField] private float spawnDelay;
 	[SerializeField] private float movespeed;
@@ -56,7 +58,8 @@ public class ChasingVineController : MonoBehaviour
 	private IEnumerator DelayedVineSpawn(float delay)
 	{
 		yield return new WaitForSeconds(delay);
-
+		respawn.gameObject.transform.position = newRespawn.gameObject.transform.position;
+		respawn.SpawnPlatform = newRespawn.SpawnPlatform;
 		chasingVineSpawn.SetActive(true);
 		isSpawning = true;
 		isChasing = false;
@@ -68,8 +71,8 @@ public class ChasingVineController : MonoBehaviour
 		if (collider.gameObject.tag == "Player")
 		{
 			// TODO: Play audio queue
-
 			StartCoroutine(DelayedVineSpawn(spawnDelay));
+			
 		}
 	}
 }

@@ -306,11 +306,12 @@ public class AreaManager : MonoBehaviour
 		{
 			StartCoroutine(Fade(GO));
 		}
+		fogsDict[currentArea].Clear();
 
 	}
     public IEnumerator Fade(GameObject GO)
     {
-
+		GO.GetComponent<Collider2D>().enabled = false;
         SpriteRenderer sr = GO.GetComponent<SpriteRenderer>(); // get the sprite renderer component
         float startAlpha = sr.color.a; // get the starting alpha value
 		float fadeTime = 2.0f;
