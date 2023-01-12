@@ -118,6 +118,7 @@ public class AreaManager : MonoBehaviour
 		spawnsDict.Add(9, a9Spawn);
 
 		// Add backgrounds to dictionary
+		backgroundDict.Add(0, null);
 		backgroundDict.Add(1, a1Background);
 		backgroundDict.Add(2, a2Background);
 		backgroundDict.Add(3, a3Background);
@@ -129,6 +130,7 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(9, a9Background);
 	
 		currentArea = 0;
+		//EnterArea(6);
 	}
 	public bool AddSoulToLantern()
 	{
@@ -165,10 +167,18 @@ public class AreaManager : MonoBehaviour
 		if(camerasDict[newArea] != camerasDict[currentArea]){
 			camerasDict[newArea].SetActive(true);
 			camerasDict[currentArea].SetActive(false);
+        }
+
+
+		if (backgroundDict[newArea] != backgroundDict[currentArea])
+        {
+			Debug.Log("enable " + newArea);
+			Debug.Log("disable " + currentArea);
+			backgroundDict[newArea]?.EnableParallax(newArea);
+			backgroundDict[currentArea]?.DeactivateParallax(currentArea);
+
 		}
 
-		//backgroundDict[currentArea].DeactivateParallax(currentArea);
-		//backgroundDict[newArea].EnableParallax(newArea);
 		currentArea = newArea;
 
 	}
