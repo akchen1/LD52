@@ -39,6 +39,27 @@ public class AreaManager : MonoBehaviour
 	[SerializeField] private Transform a5Spawn;
 	[SerializeField] private Parallax a5Background;
 
+	[SerializeField, Header("Area 6")] private List<Collider2D> a6Colliders;
+	[SerializeField] private Lantern a6Lantern;
+	[SerializeField] private GameObject a6Camera;
+	[SerializeField] private Transform a6Spawn;
+	[SerializeField] private Parallax a6Background;
+	[SerializeField, Header("Area 7")] private List<Collider2D> a7Colliders;
+	[SerializeField] private Lantern a7Lantern;
+	[SerializeField] private GameObject a7Camera;
+	[SerializeField] private Transform a7Spawn;
+	[SerializeField] private Parallax a7Background;
+	[SerializeField, Header("Area 8")] private List<Collider2D> a8Colliders;
+	[SerializeField] private Lantern a8Lantern;
+	[SerializeField] private GameObject a8Camera;
+	[SerializeField] private Transform a8Spawn;
+	[SerializeField] private Parallax a8Background;
+	[SerializeField, Header("Area 9")] private List<Collider2D> a9Colliders;
+	[SerializeField] private Lantern a9Lantern;
+	[SerializeField] private GameObject a9Camera;
+	[SerializeField] private Transform a9Spawn;
+	[SerializeField] private Parallax a9Background;
+
 	private Dictionary<int, List<Collider2D>> collidersDict = new Dictionary<int, List<Collider2D>>();
 	private Dictionary<int, Lantern> lanternsDict = new Dictionary<int, Lantern>();
 	private Dictionary<int, GameObject> camerasDict = new Dictionary<int, GameObject>();
@@ -56,6 +77,10 @@ public class AreaManager : MonoBehaviour
 		collidersDict.Add(3, a3Colliders);
 		collidersDict.Add(4, a4Colliders);
 		collidersDict.Add(5, a5Colliders);
+		collidersDict.Add(6, a6Colliders);
+		collidersDict.Add(7, a7Colliders);
+		collidersDict.Add(8, a8Colliders);
+		collidersDict.Add(9, a9Colliders);
 
 		// Add all lanterns into dictionary
 		lanternsDict.Add(1, a1Lantern);
@@ -63,6 +88,10 @@ public class AreaManager : MonoBehaviour
 		lanternsDict.Add(3, a3Lantern);
 		lanternsDict.Add(4, a4Lantern);
 		lanternsDict.Add(5, a5Lantern);
+		lanternsDict.Add(6, a6Lantern);
+		lanternsDict.Add(7, a7Lantern);
+		lanternsDict.Add(8, a8Lantern);
+		lanternsDict.Add(9, a9Lantern);
 
 		// Add all cameras into dictionary
 		camerasDict.Add(0, a0Camera);
@@ -71,6 +100,10 @@ public class AreaManager : MonoBehaviour
 		camerasDict.Add(3, a3Camera);
 		camerasDict.Add(4, a4Camera);
 		camerasDict.Add(5, a5Camera);
+		camerasDict.Add(6, a6Camera);
+		camerasDict.Add(7, a7Camera);
+		camerasDict.Add(8, a8Camera);
+		camerasDict.Add(9, a9Camera);
 
 		// Add spawns into dictionary
 		spawnsDict.Add(0, a0Spawn);
@@ -79,6 +112,10 @@ public class AreaManager : MonoBehaviour
 		spawnsDict.Add(3, a3Spawn);
 		spawnsDict.Add(4, a4Spawn);
 		spawnsDict.Add(5, a5Spawn);
+		spawnsDict.Add(6, a6Spawn);
+		spawnsDict.Add(7, a7Spawn);
+		spawnsDict.Add(8, a8Spawn);
+		spawnsDict.Add(9, a9Spawn);
 
 		// Add backgrounds to dictionary
 		backgroundDict.Add(1, a1Background);
@@ -86,8 +123,12 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(3, a3Background);
 		backgroundDict.Add(4, a4Background);
 		backgroundDict.Add(5, a5Background);
+		backgroundDict.Add(6, a6Background);
+		backgroundDict.Add(7, a7Background);
+		backgroundDict.Add(8, a8Background);
+		backgroundDict.Add(9, a9Background);
+	
 		currentArea = 0;
-		EnterArea(4);
 	}
 	public bool AddSoulToLantern()
 	{
@@ -121,8 +162,10 @@ public class AreaManager : MonoBehaviour
 		}
 
 		//Enable new camera and disable old one
-		camerasDict[newArea].SetActive(true);
-		camerasDict[currentArea].SetActive(false);
+		if(camerasDict[newArea] != camerasDict[currentArea]){
+			camerasDict[newArea].SetActive(true);
+			camerasDict[currentArea].SetActive(false);
+		}
 
 		//backgroundDict[currentArea].DeactivateParallax(currentArea);
 		//backgroundDict[newArea].EnableParallax(newArea);

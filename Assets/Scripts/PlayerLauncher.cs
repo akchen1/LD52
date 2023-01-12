@@ -207,7 +207,7 @@ public class PlayerLauncher : MonoBehaviour
 
 		
 		GameObject nextPlatform = CalculateExpectedPosition(transform.position, mouseDirection, radius, false);
-		if (currentPlatform.gameObject == nextPlatform.gameObject && Vector3.Distance(expectedPosition, transform.position) <= 1f)
+		if (currentPlatform.gameObject == nextPlatform?.gameObject && Vector3.Distance(expectedPosition, transform.position) <= 1f)
         {
 			return;
         }
