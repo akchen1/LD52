@@ -193,11 +193,6 @@ public class AreaManager : MonoBehaviour
 		}
 
 		CheckExceptions(newArea);
-
-		foreach (GameObject GO in fogsDict[currentArea])
-		{
-			GO.SetActive(true);
-		}
 		//Enable new camera and disable old one
 
 		if (camerasDict[newArea] != camerasDict[currentArea])
