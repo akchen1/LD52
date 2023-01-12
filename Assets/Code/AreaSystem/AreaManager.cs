@@ -143,8 +143,6 @@ public class AreaManager : MonoBehaviour
 		backgroundDict.Add(8, a8Background);
 		backgroundDict.Add(9, a9Background);
 
-<<<<<<< HEAD
-=======
 		//Add fogs to dictionary
 		fogsDict.Add(0, a0Fog);
 		fogsDict.Add(1, a1Fog);
@@ -157,9 +155,6 @@ public class AreaManager : MonoBehaviour
 		fogsDict.Add(8, a8Fog);
 		fogsDict.Add(9, a9Fog);
 
-
-	
->>>>>>> dcc7c047d3bfb3044a80ebac84be14ca60c8049e
 		currentArea = 0;
 		StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
 	}
@@ -204,28 +199,19 @@ public class AreaManager : MonoBehaviour
 			GO.SetActive(true);
 		}
 		//Enable new camera and disable old one
-<<<<<<< HEAD
+
 		if (camerasDict[newArea] != camerasDict[currentArea])
 		{
-=======
-		if (camerasDict[newArea] != camerasDict[currentArea]){
->>>>>>> dcc7c047d3bfb3044a80ebac84be14ca60c8049e
 			camerasDict[newArea].SetActive(true);
 			camerasDict[currentArea].SetActive(false);
 		}
 
 
 		if (backgroundDict[newArea] != backgroundDict[currentArea])
-<<<<<<< HEAD
-		{
-			backgroundDict[newArea]?.EnableParallax(newArea);
-			backgroundDict[currentArea]?.DeactivateParallax(currentArea);
-
-=======
         {
             backgroundDict[currentArea]?.DeactivateParallax();
             backgroundDict[newArea]?.EnableParallax(newArea);
->>>>>>> dcc7c047d3bfb3044a80ebac84be14ca60c8049e
+
 		}
 
 		switch (newArea)
