@@ -260,7 +260,7 @@ public class AreaManager : MonoBehaviour
 		float fadeTime = 2.0f;
         float t = 0f; // time passed
 
-        while (t < 2.0f)
+        while (t < fadeTime)
         {
             t += Time.deltaTime; // increment time passed
             float alpha = Mathf.Lerp(startAlpha, 0f, t / fadeTime); // calculate new alpha value
