@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Linq;
+using UnityEngine.UI;
 public class PlayerLauncher : MonoBehaviour
 {
-	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning }
+	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning, EndTransition, End}
 	// The Rigidbody2D component of the Player object
 	public Rigidbody2D PlayerRigidbody;
 
@@ -16,6 +17,7 @@ public class PlayerLauncher : MonoBehaviour
 
 	// Set to the current platform the player is on
 	[SerializeField] private Platform currentPlatform;
+	[SerializeField] private Image endScreen;
 
 	// State of the player
 	public PlayerState state;
@@ -58,6 +60,36 @@ public class PlayerLauncher : MonoBehaviour
 		//Debug.DrawRay(transform.position, child.transform.right, Color.red);
 		//Debug.DrawRay(transform.position, child.transform.up, Color.green);
 
+		CheckEnd();
+	}
+
+	private void CheckEnd()
+    {
+		if (state != PlayerState.InPlatform) return;
+		EndingTrigger end = currentPlatform?.GetComponent<EndingTrigger>();
+		if (end != null)
+		{
+			StartCoroutine(EndGame());
+
+		}
+	}
+
+	public IEnumerator EndGame()
+    {
+        PlayerRigidbody.bodyType = RigidbodyType2D.Static;
+        state = PlayerState.EndTransition;
+		yield return new WaitForSecondsRealtime(3f / 6f);
+		state = PlayerState.End;
+		yield return new WaitForSeconds((7f / 6) * 5f);
+
+		for (float t = 0f; t <= 2f; t += Time.deltaTime)
+		{
+			float normalizedTime = t / 2f;
+			Color color = endScreen.color;
+			color.a = normalizedTime;
+			endScreen.color = color;
+			yield return 0;
+		}
 
 	}
 
@@ -83,6 +115,8 @@ public class PlayerLauncher : MonoBehaviour
 		animator.SetBool("isLanding", state == PlayerState.Landing);
 		animator.SetBool("isTransition", state == PlayerState.LandingTransition);
 		animator.SetBool("isRespawning", state == PlayerState.Respawning);
+		animator.SetBool("isEnd", state == PlayerState.End);
+		animator.SetBool("isEndTransition", state == PlayerState.EndTransition);
 	}
 
 	private void Move()
@@ -190,6 +224,9 @@ public class PlayerLauncher : MonoBehaviour
 		normal = currentPlatform.GetClosestEdge(transform.position);
 
 		directionScale = Mathf.Sign(-normal.y);
+
+		
+
 	}
 
 	private void BeginJump()
