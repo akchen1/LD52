@@ -15,8 +15,10 @@ public class PlayerKiller : MonoBehaviour
 	}
 
 
-	void OnTriggerEnter2D(Collider2D player) {
-		if (player.gameObject.tag == "Player") {
+	void OnTriggerEnter2D(Collider2D player)
+	{
+		if (player.gameObject.tag == "Player")
+		{
 			var objectThatMadeItTrigger = player.gameObject;
 			player.gameObject.GetComponent<PlayerLauncher>().DieHard();
 		}
