@@ -22,20 +22,25 @@ public class Rope : MonoBehaviour
             } else
             {
 
-                StartCoroutine(FadeRope(segment));
+                StartCoroutine(FadeRope(segment.gameObject));
             }
+        }
+        if (platfrom.GetComponent<RopePlatform>().isDestroy)
+        {
+            StartCoroutine(FadeRope(platfrom.gameObject));
         }
     }
 
-    private IEnumerator FadeRope(RopeSegment segment)
+    private IEnumerator FadeRope(GameObject segment)
     {
         Destroy(segment.GetComponent<Joint2D>());
+        SpriteRenderer spriteRenderer = segment.GetComponent<SpriteRenderer>();
         for (float t = 2f; t >= 0f; t -= Time.deltaTime)
         {
             float normalizedTime = t / 2f;
-            Color color = segment.SpriteRenderer.color;
+            Color color = spriteRenderer.color;
             color.a = normalizedTime;
-            segment.SpriteRenderer.color = color;
+            spriteRenderer.color = color;
             yield return 0;
         }
         Destroy(segment.gameObject);
