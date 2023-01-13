@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5245215689278802306
 Transform:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5245215689567302158
 Transform:
   m_ObjectHideFlags: 0
@@ -388,5 +388,5 @@ MonoBehaviour:
   chasingVineSpawn: {fileID: 5245215689278802307}
   chasingVine: {fileID: 5245215689567302159}
   maxX: 36
-  spawnDelay: 3
+  spawnDelay: 5
   movespeed: 20

@@ -329,9 +329,17 @@ public class PlayerLauncher : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1.167f);
 		//Death Function
-		GameObject spawnGO = GameObject.FindGameObjectWithTag("AreaManager").GetComponent<AreaManager>().GetCurrentSpawn();
+		AreaManager areaManager = GameObject.FindGameObjectWithTag("AreaManager").GetComponent<AreaManager>();
+		GameObject spawnGO = areaManager.GetCurrentSpawn();
 		transform.position = spawnGO.transform.position;
 		state = PlayerState.Respawning;
+
+		int currentArea = areaManager.GetCurrentArea();
+		Lantern lantern = areaManager.GetCurrentLantern();
+		if ((currentArea == 7 || currentArea == 8) && lantern != null && !lantern.AreaCleared())
+        {
+			FindObjectOfType<ResetAreaController>().ResetArea(false);
+        }
 
 		yield return new WaitForSeconds(0.833f);
 		currentPlatform = spawnGO.GetComponent<Respawn>().SpawnPlatform;
