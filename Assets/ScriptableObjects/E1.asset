@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objects:
   - {fileID: 431594002725047725, guid: 4d44f52c23b029e46a4859953cd35a22, type: 3}
-  location:
+  positions:
   - {x: 68.15793, y: 17.70135, z: 0}
-  scale:
+  scales:
   - {x: 1, y: 1, z: 1}
-  positions: []

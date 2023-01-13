@@ -12,6 +12,11 @@ public class ResetControllerEditor : Editor
         if (GUILayout.Button("Sync Objects"))
         {
             myScript.SyncObjects();
+            foreach (Object asset in myScript.GetAreaObjects())
+            {
+                EditorUtility.SetDirty(asset);
+            }
+            AssetDatabase.SaveAssets();
         }
     }
 }

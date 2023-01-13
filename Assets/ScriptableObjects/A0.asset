@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: A0
   m_EditorClassIdentifier: 
   objects: []
-  location: []
+  positions: []
+  scales: []
