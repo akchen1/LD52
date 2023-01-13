@@ -6,6 +6,7 @@ public class ResetAreaController : MonoBehaviour
 {
     [SerializeField] GameObject BirdPrefab;
     [SerializeField] GameObject SwingPlatformPrefab;
+    [SerializeField] GameObject ChasingVinesPrefab;
 
     [SerializeField] List<GameObject> a0Objects;
     [SerializeField] List<GameObject> a1Objects;
@@ -15,7 +16,7 @@ public class ResetAreaController : MonoBehaviour
     [SerializeField] List<GameObject> c1Objects;
     [SerializeField] List<GameObject> c2Objects;
     [SerializeField] List<GameObject> d1Objects;
-    [SerializeField] List<GameObject> d2Objects;
+    //[SerializeField] List<GameObject> d2Objects;
     [SerializeField] List<GameObject> e1Objects;
 
     [SerializeField] AreaObjects[] areaObjects;
@@ -42,7 +43,7 @@ public class ResetAreaController : MonoBehaviour
         spawnedObjects.Add(5, c1Objects);
         spawnedObjects.Add(6, c2Objects);
         spawnedObjects.Add(7, d1Objects);
-        spawnedObjects.Add(8, d2Objects);
+        spawnedObjects.Add(8, d1Objects);
         spawnedObjects.Add(9, e1Objects);
     }
 
@@ -69,6 +70,9 @@ public class ResetAreaController : MonoBehaviour
                 else if (obj.GetComponentInChildren<RopePlatform>() != null)
                 {
                     prefab = SwingPlatformPrefab;
+                } else if (obj.GetComponent<ChasingVineController>() != null)
+                {
+                    prefab = ChasingVinesPrefab;
                 }
                 savedArea.objects.Add(prefab);
                 savedArea.positions.Add(obj.transform.position);
@@ -82,14 +86,20 @@ public class ResetAreaController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Lantern lantern = areaManager.GetCurrentLantern();
-            if (lantern == null) return;
-            if (lantern.AreaCleared()) return;
-            lantern.ResetLantern();
-            int areaIndex = areaManager.GetCurrentArea();
-            SpawnObjects(areaIndex);
-            player.DieHard();
+            ResetArea(true);
         }
+    }
+
+    public void ResetArea(bool resetPlayer)
+    {
+        Lantern lantern = areaManager.GetCurrentLantern();
+        if (lantern == null) return;
+        if (lantern.AreaCleared()) return;
+        lantern.ResetLantern();
+        int areaIndex = areaManager.GetCurrentArea();
+        SpawnObjects(areaIndex);
+        if (resetPlayer)
+            player.DieHard();
     }
 
     public void SpawnObjects(int areaIndex)

@@ -6281,7 +6281,7 @@ MonoBehaviour:
   - {fileID: 1064769787}
   a8Lantern: {fileID: 259761040}
   a8Camera: {fileID: 1735886993}
-  a8Spawn: {fileID: 1295747958}
+  a8Spawn: {fileID: 1539511542}
   a8Background: {fileID: 633149006}
   a8Fog:
   - {fileID: 1917912198}
@@ -11208,14 +11208,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 566347513}
     m_Modifications:
-    - target: {fileID: 5245215689278802307, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5245215689567302159, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5245215690363685321, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -11264,10 +11256,6 @@ PrefabInstance:
       propertyPath: respawn
       value: 
       objectReference: {fileID: 1539511543}
-    - target: {fileID: 5245215690363685323, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
-      propertyPath: movespeed
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 5245215690363685323, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
       propertyPath: newRespawn
       value: 
@@ -14705,6 +14693,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2156e90bb8785594b909cbf4262b8636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1742808861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5245215690363685326, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
+  m_PrefabInstance: {fileID: 1336150461}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1757028131
 GameObject:
   m_ObjectHideFlags: 0
@@ -16948,6 +16941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BirdPrefab: {fileID: 431594002725047725, guid: 4d44f52c23b029e46a4859953cd35a22, type: 3}
   SwingPlatformPrefab: {fileID: 3112058592388310664, guid: 57a910f93a4269347adbe831d01bb0cc, type: 3}
+  ChasingVinesPrefab: {fileID: 5245215690363685326, guid: 410ea740b567c4842a21f142aa97bcf3, type: 3}
   a0Objects: []
   a1Objects:
   - {fileID: 268035757}
@@ -16971,7 +16965,7 @@ MonoBehaviour:
   d1Objects:
   - {fileID: 2005547276}
   - {fileID: 380257053}
-  d2Objects:
+  - {fileID: 1742808861}
   - {fileID: 1671743109}
   - {fileID: 1658730371}
   - {fileID: 1037605446}
