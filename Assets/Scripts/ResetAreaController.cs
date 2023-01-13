@@ -93,16 +93,26 @@ public class ResetAreaController : MonoBehaviour
     public void ResetArea(bool resetPlayer)
     {
         Lantern lantern = areaManager.GetCurrentLantern();
-        if (lantern == null) return;
-        if (lantern.AreaCleared()) return;
-        lantern.ResetLantern();
+
         int areaIndex = areaManager.GetCurrentArea();
-        SpawnObjects(areaIndex);
+
+        bool onlyRocks = false;
+        if (lantern != null)
+        {
+            if (lantern.AreaCleared())
+            {
+                onlyRocks = true;
+            } else
+            {
+                lantern.ResetLantern();
+            }
+        }
+        SpawnObjects(areaIndex, onlyRocks);
         if (resetPlayer)
             player.DieHard();
     }
 
-    public void SpawnObjects(int areaIndex)
+    public void SpawnObjects(int areaIndex, bool rocksOnly)
     {
         foreach (GameObject obj in spawnedObjects[areaIndex])
         {
@@ -116,10 +126,16 @@ public class ResetAreaController : MonoBehaviour
         AreaObjects area = areaObjects[areaIndex];
         for (int i = 0; i < area.objects.Count; i++)
         {
+            if (rocksOnly && area.objects[i].GetComponentInChildren<RopePlatform>() == null) continue;
             GameObject spawnedObject = Instantiate(area.objects[i], area.positions[i], Quaternion.identity);
             spawnedObject.transform.localScale = area.scales[i];
             spawnedObjects[areaIndex].Add(spawnedObject);
 
         }
+    }
+
+    public AreaObjects[] GetAreaObjects()
+    {
+        return areaObjects;
     }
 }

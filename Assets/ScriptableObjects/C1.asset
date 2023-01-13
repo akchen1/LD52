@@ -15,10 +15,9 @@ MonoBehaviour:
   objects:
   - {fileID: 431594002725047725, guid: 4d44f52c23b029e46a4859953cd35a22, type: 3}
   - {fileID: 431594002725047725, guid: 4d44f52c23b029e46a4859953cd35a22, type: 3}
-  location:
-  - {x: -41.44653, y: -14.85427, z: 0}
+  positions:
+  - {x: -41.446533, y: -14.854265, z: 0}
   - {x: -29.2, y: -10.5, z: 0}
-  scale:
+  scales:
   - {x: 1, y: 1, z: 1}
   - {x: 1, y: 1, z: 1}
-  positions: []
