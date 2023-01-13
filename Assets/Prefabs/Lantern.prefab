@@ -509,6 +509,7 @@ MonoBehaviour:
   - {fileID: 1658737882542190251}
   - {fileID: 2410786024416015252}
   - {fileID: 3031953406470286207}
+  emptyIndicatorSprite: {fileID: 21300000, guid: 94f54f3de0e381c459577ae492d5e974, type: 3}
 --- !u!95 &3749500208285483806
 Animator:
   serializedVersion: 4

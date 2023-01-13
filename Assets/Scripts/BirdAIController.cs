@@ -42,6 +42,7 @@ public class BirdAIController : MonoBehaviour
 		agent.destination = transform.position;
 		animator.SetBool("isDead", false);
 
+		target = FindObjectOfType<PlayerLauncher>().transform;
 	}
 
 
@@ -143,8 +144,7 @@ public class BirdAIController : MonoBehaviour
 	{
 		// 4 frame / 8 frames/second
 		yield return new WaitForSeconds(4f / 8f);
-		Instantiate(SoulPrefab, transform.parent.parent).transform.position = transform.position;
+		Instantiate(SoulPrefab, transform.position, Quaternion.identity);
 		Destroy(this.gameObject);
 	}
-
 }
