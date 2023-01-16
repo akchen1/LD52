@@ -8,6 +8,8 @@ TagManager:
   - AreaManager
   - Swing
   - InnerWall
+  - Water
+  - Fog
   layers:
   - Default
   - TransparentFX

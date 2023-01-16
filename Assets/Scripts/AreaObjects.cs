@@ -8,4 +8,5 @@ public class AreaObjects : ScriptableObject
     public List<GameObject> objects = new List<GameObject>();
     public List<Vector3> positions = new List<Vector3>();
     public List<Vector3> scales = new List<Vector3>();
+    public List<bool> hangingPlatformDestroy = new List<bool>();    // not the best way to do this but works for now
 }

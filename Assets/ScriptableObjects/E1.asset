@@ -18,3 +18,4 @@ MonoBehaviour:
   - {x: 68.15793, y: 17.70135, z: 0}
   scales:
   - {x: 1, y: 1, z: 1}
+  hangingPlatformDestroy: 01

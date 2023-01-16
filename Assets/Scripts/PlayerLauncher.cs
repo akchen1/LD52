@@ -22,9 +22,6 @@ public class PlayerLauncher : MonoBehaviour
 	// State of the player
 	public PlayerState state;
 
-	// Used for rope platform. keep track of original Rigidbody type
-	private RigidbodyType2D currentPlatformOriginalRBType;
-
 	// Expected position where the player will end up after jumping
 	private Vector3 expectedPosition;
 	private Vector2 launchDirection;
@@ -36,6 +33,8 @@ public class PlayerLauncher : MonoBehaviour
 	private float directionScale;   // Keeps the player moving in the same direction if holding down a key
 
 	[SerializeField] private GameObject child;
+	[SerializeField] private float moveSpeed;
+	[SerializeField] private float airTravelSpeed;
 	float playerRadius;
 	private void Start()
 	{
@@ -45,7 +44,7 @@ public class PlayerLauncher : MonoBehaviour
 		animator = GetComponentInChildren<Animator>();
 		state = PlayerState.InPlatform;
 		playerRadius = GetComponent<CircleCollider2D>().radius;
-
+		directionScale = 1;
 	}
 
 	private void Update()
@@ -127,19 +126,19 @@ public class PlayerLauncher : MonoBehaviour
 		float speed = 0;
 		int normalScale = 1;    // scales the up direction depending if going left or right
 
-		if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
-		{
-			directionScale = Mathf.Sign(-normal.y);
-		}
+		//if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+		//{
+  //          directionScale = Mathf.Sign(-normal.y);
+  //      }
 
 		if (Input.GetKey(KeyCode.A))
 		{
-			speed += -0.1f;
-			normalScale = -1;
+			speed += moveSpeed;
 		}
 		if (Input.GetKey(KeyCode.D))
 		{
-			speed += 0.1f;
+			speed -= moveSpeed;
+			normalScale = -1;
 		}
 
 		moveDir = directionScale * (Vector2)child.transform.right * speed;
@@ -166,15 +165,14 @@ public class PlayerLauncher : MonoBehaviour
 		GameObject expected = CalculateExpectedPosition(startLaunchPosition, moveVector.normalized, moveVector.magnitude, checkIfSame);
 		expectedPlatform = expected?.GetComponent<Platform>();
 
-
 		// Check if arrived at expected position
 		Vector2 direction = (expectedPosition - transform.position).normalized;
 		float distance = Vector2.Distance(expectedPosition, transform.position);
-
+		float maxDistance = Vector2.Distance(expectedPosition, startLaunchPosition);
+		float speed = Mathf.Clamp(airTravelSpeed * (distance / maxDistance), 10, airTravelSpeed);
 		if (distance >= 0.1f)   // Did not arrive at expected position
 		{
-			PlayerRigidbody.velocity = direction.normalized * 10f;
-
+			PlayerRigidbody.velocity = direction.normalized * speed;
 			return;
 		}
 
@@ -221,12 +219,9 @@ public class PlayerLauncher : MonoBehaviour
 		yield return new WaitForSeconds(3f / 8f);
 
 		state = PlayerState.InPlatform;
-		normal = currentPlatform.GetClosestEdge(transform.position);
 
-		directionScale = Mathf.Sign(-normal.y);
-
-		
-
+		//normal = currentPlatform.GetClosestEdge(transform.position);
+		//directionScale = Mathf.Sign(-normal.y);
 	}
 
 	private void BeginJump()
@@ -255,6 +250,7 @@ public class PlayerLauncher : MonoBehaviour
 		{
 			return;
 		}
+
 		maxLaunchPosition = transform.position + (Vector3)mouseDirection * radius;
 		launchDirection = mouseDirection.normalized;
 		coll.isTrigger = true;
@@ -318,7 +314,7 @@ public class PlayerLauncher : MonoBehaviour
 		if (hits != null)
 		{
 
-			expectedPosition = hits[0].point - direction * 0.1f;
+			expectedPosition = hits[0].point - direction * 0.15f;
 			return hits[0].collider.gameObject;
 		}
 		expectedPosition = startPosition + direction * distance;
