@@ -63,6 +63,7 @@ public class ResetAreaController : MonoBehaviour
             foreach (GameObject obj in objects)
             {
                 GameObject prefab = null;
+                bool hangingPlatfromDestroy = true;
                 if (obj.GetComponent<BirdAIController>() != null)
                 {
                     prefab = BirdPrefab;
@@ -70,6 +71,7 @@ public class ResetAreaController : MonoBehaviour
                 else if (obj.GetComponentInChildren<RopePlatform>() != null)
                 {
                     prefab = SwingPlatformPrefab;
+                    hangingPlatfromDestroy = obj.GetComponentInChildren<RopePlatform>().isDestroy;
                 } else if (obj.GetComponent<ChasingVineController>() != null)
                 {
                     prefab = ChasingVinesPrefab;
@@ -77,6 +79,7 @@ public class ResetAreaController : MonoBehaviour
                 savedArea.objects.Add(prefab);
                 savedArea.positions.Add(obj.transform.position);
                 savedArea.scales.Add(obj.transform.localScale);  // may be problem
+                savedArea.hangingPlatformDestroy.Add(hangingPlatfromDestroy);
             }
         }
     }
@@ -126,9 +129,11 @@ public class ResetAreaController : MonoBehaviour
         AreaObjects area = areaObjects[areaIndex];
         for (int i = 0; i < area.objects.Count; i++)
         {
-            if (rocksOnly && area.objects[i].GetComponentInChildren<RopePlatform>() == null) continue;
+            RopePlatform ropePlatform = area.objects[i].GetComponentInChildren<RopePlatform>();
+            if (rocksOnly && ropePlatform == null) continue;
             GameObject spawnedObject = Instantiate(area.objects[i], area.positions[i], Quaternion.identity);
             spawnedObject.transform.localScale = area.scales[i];
+            if (ropePlatform != null) ropePlatform.isDestroy = area.hangingPlatformDestroy[i];
             spawnedObjects[areaIndex].Add(spawnedObject);
 
         }

@@ -193,8 +193,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerRigidbody: {fileID: 6789367287515676379}
   currentPlatform: {fileID: 0}
+  endScreen: {fileID: 0}
   state: 0
   child: {fileID: 6278849305171234063}
+  moveSpeed: 0.15
+  airTravelSpeed: 20
 --- !u!114 &6789367287515676375
 MonoBehaviour:
   m_ObjectHideFlags: 0

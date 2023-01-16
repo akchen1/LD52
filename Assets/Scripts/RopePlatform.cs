@@ -13,7 +13,7 @@ public class RopePlatform : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Wall") && collider.gameObject.tag != "Fog" && collider.gameObject.tag != "Swing")
         {
             rb.bodyType = RigidbodyType2D.Static;
         }
