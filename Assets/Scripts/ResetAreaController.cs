@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class ResetAreaController : MonoBehaviour
 {
     [SerializeField] GameObject BirdPrefab;
@@ -142,5 +142,10 @@ public class ResetAreaController : MonoBehaviour
     public AreaObjects[] GetAreaObjects()
     {
         return areaObjects;
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class AudioSystem : MonoBehaviour
 {
 	private static AudioSystem _instance;
@@ -9,6 +9,9 @@ public class AudioSystem : MonoBehaviour
 
 	public AudioSource SfxSource;
 	public AudioSource MusicSource;
+
+	public Slider SFXSlider;
+	public Slider MusicSlider;
 
 	[Header("Music"), SerializeField] private AudioClip themeA;
 	[SerializeField] private AudioClip themeB;
@@ -69,7 +72,13 @@ public class AudioSystem : MonoBehaviour
 		sfx.Add("VineBurst", vineBurst);
 	}
 
-	public void PlaySFX(string name)
+    private void Start()
+    {
+		SFXSlider.value = SfxSource.volume;
+		MusicSlider.value = MusicSource.volume;
+    }
+
+    public void PlaySFX(string name)
 	{
 		// Check if sfx exists
 		if (sfx.ContainsKey(name))
@@ -151,4 +160,15 @@ public class AudioSystem : MonoBehaviour
 		MusicSource.loop = true;
 		MusicSource.Play();
 	}
+
+	public void AdjustMusicVolume()
+    {
+		MusicSource.volume = MusicSlider.value;
+		musicVolume = MusicSlider.value;
+    }
+
+	public void AdjustSFXVolume()
+    {
+		SfxSource.volume = SFXSlider.value;
+    }
 }
