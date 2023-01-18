@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioSystem : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class AudioSystem : MonoBehaviour
 
 	public AudioSource SfxSource;
 	public AudioSource MusicSource;
+
+	public Slider SFXSlider;
+	public Slider MusicSlider;
 
 	[Header("Music"), SerializeField] private AudioClip themeA;
 	[SerializeField] private AudioClip themeB;
@@ -69,7 +73,12 @@ public class AudioSystem : MonoBehaviour
 		sfx.Add("VineBurst", vineBurst);
 	}
 
-	public void PlaySFX(string name)
+    private void Start()
+    {
+		SetVolumeLevels();
+    }
+
+    public void PlaySFX(string name)
 	{
 		// Check if sfx exists
 		if (sfx.ContainsKey(name))
@@ -150,5 +159,31 @@ public class AudioSystem : MonoBehaviour
 		MusicSource.clip = music["ThemeD"];
 		MusicSource.loop = true;
 		MusicSource.Play();
+	}
+
+	private void SetVolumeLevels()
+    {
+		float musicLevel = PlayerPrefs.GetFloat("MusicVolume", 0.25f);
+		float sfxLevel = PlayerPrefs.GetFloat("SFXVolume", 0.25f);
+
+		musicVolume = musicLevel;
+		MusicSource.volume = musicLevel;
+		SfxSource.volume = sfxLevel;
+
+		MusicSlider.value = musicLevel;
+		SFXSlider.value = sfxLevel;
+	}
+
+	public void AdjustMusicVolume()
+    {
+        MusicSource.volume = MusicSlider.value;
+        musicVolume = MusicSlider.value;
+		PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
+    }
+
+	public void AdjustSFXVolume()
+    {
+		SfxSource.volume = SFXSlider.value;
+		PlayerPrefs.SetFloat("SFXVolume", SFXSlider.value);
 	}
 }

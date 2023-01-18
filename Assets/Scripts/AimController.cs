@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class AimController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class AimController : MonoBehaviour
         // Control the length of the arrow based on the left mouse button
         if (Input.GetMouseButton(1))
         {
+            if (EventSystem.current.IsPointerOverGameObject()) return;
             Arrow.SetActive(true);
             // Rotate the arrow towards the mouse position
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

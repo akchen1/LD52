@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class PlayerLauncher : MonoBehaviour
 {
 	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning, EndTransition, End}
@@ -75,6 +76,7 @@ public class PlayerLauncher : MonoBehaviour
 
 	public IEnumerator EndGame()
     {
+		endScreen.gameObject.SetActive(true);
         PlayerRigidbody.bodyType = RigidbodyType2D.Static;
         state = PlayerState.EndTransition;
 		yield return new WaitForSecondsRealtime(3f / 6f);
@@ -228,7 +230,7 @@ public class PlayerLauncher : MonoBehaviour
 	{
 		if (state != PlayerState.InPlatform) return;
 		if (!(Input.GetMouseButtonUp(0))) return;
-
+		if (EventSystem.current.IsPointerOverGameObject()) return;
 
 		Vector3 worldPos = GetMouseWorldPosition();
 
