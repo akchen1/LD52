@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class AudioSystem : MonoBehaviour
 {
 	private static AudioSystem _instance;
@@ -74,8 +75,7 @@ public class AudioSystem : MonoBehaviour
 
     private void Start()
     {
-		SFXSlider.value = SfxSource.volume;
-		MusicSlider.value = MusicSource.volume;
+		SetVolumeLevels();
     }
 
     public void PlaySFX(string name)
@@ -161,14 +161,29 @@ public class AudioSystem : MonoBehaviour
 		MusicSource.Play();
 	}
 
+	private void SetVolumeLevels()
+    {
+		float musicLevel = PlayerPrefs.GetFloat("MusicVolume", 0.25f);
+		float sfxLevel = PlayerPrefs.GetFloat("SFXVolume", 0.25f);
+
+		musicVolume = musicLevel;
+		MusicSource.volume = musicLevel;
+		SfxSource.volume = sfxLevel;
+
+		MusicSlider.value = musicLevel;
+		SFXSlider.value = sfxLevel;
+	}
+
 	public void AdjustMusicVolume()
     {
-		MusicSource.volume = MusicSlider.value;
-		musicVolume = MusicSlider.value;
+        MusicSource.volume = MusicSlider.value;
+        musicVolume = MusicSlider.value;
+		PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
     }
 
 	public void AdjustSFXVolume()
     {
 		SfxSource.volume = SFXSlider.value;
-    }
+		PlayerPrefs.SetFloat("SFXVolume", SFXSlider.value);
+	}
 }
