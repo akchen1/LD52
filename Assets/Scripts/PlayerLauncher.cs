@@ -333,8 +333,7 @@ public class PlayerLauncher : MonoBehaviour
 		state = PlayerState.Respawning;
 
 		int currentArea = areaManager.GetCurrentArea();
-		Lantern lantern = areaManager.GetCurrentLantern();
-		if ((currentArea == 7 || currentArea == 8) && lantern != null && !lantern.AreaCleared())
+		if (currentArea == 7 || currentArea == 8)
         {
 			FindObjectOfType<ResetAreaController>().ResetArea(false);
         }
