@@ -59,6 +59,8 @@ public class ResetAreaController : MonoBehaviour
             savedArea.objects.Clear();
             savedArea.positions.Clear();
             savedArea.scales.Clear();
+            savedArea.hangingPlatformDestroy.Clear();
+
 
             foreach (GameObject obj in objects)
             {
@@ -110,9 +112,20 @@ public class ResetAreaController : MonoBehaviour
                 lantern.ResetLantern();
             }
         }
-        SpawnObjects(areaIndex, onlyRocks);
         if (resetPlayer)
             player.DieHard();
+        DestroySouls();
+        SpawnObjects(areaIndex, onlyRocks);
+        areaManager.EnterArea(areaIndex);
+    }
+
+    private void DestroySouls()
+    {
+        Soul[] souls = FindObjectsOfType<Soul>();
+        foreach (Soul soul in souls)
+        {
+            Destroy(soul.gameObject);
+        }
     }
 
     public void SpawnObjects(int areaIndex, bool rocksOnly)
