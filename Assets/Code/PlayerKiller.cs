@@ -20,17 +20,25 @@ public class PlayerKiller : MonoBehaviour
 		if (player.gameObject.tag == "Player")
 		{
 			var objectThatMadeItTrigger = player.gameObject;
-			PlaySFX();
 			player.gameObject.GetComponent<PlayerLauncher>().DieHard();
 		}
+
+		PlayWaterSFX(player.gameObject);
 	}
 
-	private void PlaySFX()
+	private void PlayWaterSFX(GameObject objectHit)
     {
-		if (gameObject.tag == "Water")
+		if (gameObject.tag != "Water") return;
+		string sfx = "";
+		if (objectHit.GetComponentInParent<RopePlatform>() != null)
+		{
+			Debug.Log("Play");
+			Debug.Log(objectHit.name);
+			sfx = "WaterRockSplash";
+		} else if (objectHit.tag == "Player")
         {
-			AudioSystem.Instance.PlaySFX("WaterFoxSplash");
-        }
-    }
-
+			sfx = "WaterFoxSplash";
+		}
+		AudioSystem.Instance.PlaySFX(sfx);
+	}
 }

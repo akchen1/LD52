@@ -14,6 +14,7 @@ public class Rope : MonoBehaviour
         if (ropeCut) return;
         ropeCut = true;
         platfrom.gravityScale = 5;
+        platfrom.GetComponent<Joint2D>().enabled = false;
         foreach (RopeSegment segment in segments)
         {
             if (segment == cutSegment)
