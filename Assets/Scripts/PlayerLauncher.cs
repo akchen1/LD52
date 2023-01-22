@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class PlayerLauncher : MonoBehaviour
 {
-	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning, EndTransition, End}
+	public enum PlayerState { InPlatform, InAir, Landing, LandingTransition, Dead, Respawning, EndTransition, End }
 	// The Rigidbody2D component of the Player object
 	public Rigidbody2D PlayerRigidbody;
 
@@ -64,7 +64,7 @@ public class PlayerLauncher : MonoBehaviour
 	}
 
 	private void CheckEnd()
-    {
+	{
 		if (state != PlayerState.InPlatform) return;
 		EndingTrigger end = currentPlatform?.GetComponent<EndingTrigger>();
 		if (end != null)
@@ -75,10 +75,10 @@ public class PlayerLauncher : MonoBehaviour
 	}
 
 	public IEnumerator EndGame()
-    {
+	{
 		endScreen.gameObject.SetActive(true);
-        PlayerRigidbody.bodyType = RigidbodyType2D.Static;
-        state = PlayerState.EndTransition;
+		PlayerRigidbody.bodyType = RigidbodyType2D.Static;
+		state = PlayerState.EndTransition;
 		yield return new WaitForSecondsRealtime(3f / 6f);
 		state = PlayerState.End;
 		yield return new WaitForSeconds((7f / 6) * 5f);
@@ -130,8 +130,8 @@ public class PlayerLauncher : MonoBehaviour
 
 		//if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
 		//{
-  //          directionScale = Mathf.Sign(-normal.y);
-  //      }
+		//          directionScale = Mathf.Sign(-normal.y);
+		//      }
 
 		if (Input.GetKey(KeyCode.A))
 		{
@@ -334,9 +334,10 @@ public class PlayerLauncher : MonoBehaviour
 
 		int currentArea = areaManager.GetCurrentArea();
 		if (currentArea == 7 || currentArea == 8)
-        {
+		{
+			FindObjectOfType<ChasingVineCam>().ResetPosition();
 			FindObjectOfType<ResetAreaController>().ResetArea(false);
-        }
+		}
 
 		yield return new WaitForSeconds(0.833f);
 		currentPlatform = spawnGO.GetComponent<Respawn>().SpawnPlatform;

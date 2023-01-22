@@ -6,6 +6,7 @@ public class ChasingVineController : MonoBehaviour
 {
 	[SerializeField] private GameObject chasingVineSpawn;
 	[SerializeField] private GameObject chasingVine;
+	[SerializeField] private ChasingVineCam chasingVineCam;
 	//[SerializeField] private Respawn respawn;	
 	//[SerializeField] private Respawn newRespawn;
 	[SerializeField] private float maxX;
@@ -22,6 +23,11 @@ public class ChasingVineController : MonoBehaviour
 		isChasing = false;
 		isSpawning = false;
 		timer = 0f;
+
+		if (chasingVineCam == null)
+		{
+			chasingVineCam = FindObjectOfType<ChasingVineCam>();
+		}
 	}
 
 	// Update is called once per frame
@@ -42,14 +48,15 @@ public class ChasingVineController : MonoBehaviour
 			if (!chasingVine.activeSelf)
 			{
 				chasingVine.SetActive(true);
-				chasingVine.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-				chasingVine.GetComponent<Rigidbody2D>().AddForce(Vector2.right * movespeed);
+				chasingVine.transform.SetParent(chasingVineCam.transform);
+				chasingVineCam.Vine = chasingVine;
+				chasingVineCam.IsMoving = true;
 			}
 
 			// Update position of chasing vine
 			if (chasingVine.transform.position.x >= maxX)
 			{
-				chasingVine.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+				chasingVineCam.IsMoving = false;
 				isChasing = false;
 			}
 		}
@@ -72,7 +79,7 @@ public class ChasingVineController : MonoBehaviour
 		{
 			// TODO: Play audio queue
 			StartCoroutine(DelayedVineSpawn(spawnDelay));
-			
+
 		}
 	}
 }
