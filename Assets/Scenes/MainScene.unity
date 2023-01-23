@@ -15054,6 +15054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815950eb9d14c9e46854aee530c20ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camMoveSpeed: 2.5
   IsMoving: 0
   Vine: {fileID: 0}
 --- !u!1 &1739159528

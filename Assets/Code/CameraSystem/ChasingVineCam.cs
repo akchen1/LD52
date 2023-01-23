@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ChasingVineCam : MonoBehaviour
 {
+	[SerializeField] private float camMoveSpeed;
 	public bool IsMoving = false;
 	public GameObject Vine;
 
@@ -20,7 +21,7 @@ public class ChasingVineCam : MonoBehaviour
 	{
 		if (IsMoving)
 		{
-			transform.position += new Vector3(0.015f, 0);
+			transform.position += new Vector3(camMoveSpeed * Time.deltaTime, 0);
 		}
 	}
 
