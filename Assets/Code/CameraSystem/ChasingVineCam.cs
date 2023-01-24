@@ -19,7 +19,7 @@ public class ChasingVineCam : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (IsMoving)
+		if (IsMoving && !PauseScreen.Instance.IsPaused())
 		{
 			transform.position += new Vector3(camMoveSpeed * Time.deltaTime, 0);
 		}

@@ -157,6 +157,7 @@ public class AreaManager : MonoBehaviour
 		fogsDict.Add(9, a9Fog);
 
 		currentArea = 0;
+
 	}
 
     private void Start()
@@ -364,4 +365,6 @@ public class AreaManager : MonoBehaviour
 				cinemachineVirtualCamera.AddCinemachineComponent<CinemachineFramingTransposer>();
         }
 	}
+
+
 }

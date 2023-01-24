@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 400
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -141,15 +141,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: endingidle_0
+      name: endingidle_5
       rect:
         serializedVersion: 2
         x: 0
-        y: 4422
+        y: 737
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,15 +162,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: endingidle_1
+      name: endingidle_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 3685
+        y: 2211
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,15 +183,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: endingidle_2
+      name: endingidle_1
       rect:
         serializedVersion: 2
         x: 0
-        y: 2948
+        y: 3685
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -204,15 +204,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: endingidle_3
+      name: endingidle_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 2211
+        y: 2948
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -225,15 +225,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: endingidle_4
+      name: endingidle_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 1474
+        y: 0
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -246,15 +246,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: endingidle_5
+      name: endingidle_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 737
+        y: 4422
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,15 +267,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: endingidle_6
+      name: endingidle_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 1469
         width: 3070
         height: 737
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -298,13 +298,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      endingidle_5: -95476948
-      endingidle_3: -588225413
-      endingidle_1: -630847795
-      endingidle_2: 127707670
-      endingidle_6: 2128830596
-      endingidle_0: 937083738
-      endingidle_4: 1884626870
+      endingidle_5: 937083738
+      endingidle_3: -630847795
+      endingidle_1: 127707670
+      endingidle_2: -588225413
+      endingidle_6: 1884626870
+      endingidle_0: -95476948
+      endingidle_4: 2128830596
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

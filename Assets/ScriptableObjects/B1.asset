@@ -15,7 +15,7 @@ MonoBehaviour:
   objects:
   - {fileID: 431594002725047725, guid: 4d44f52c23b029e46a4859953cd35a22, type: 3}
   positions:
-  - {x: 34.068153, y: -22.190266, z: 0}
+  - {x: 34.43, y: -22.89, z: 0}
   scales:
   - {x: 1, y: 1, z: 1}
   hangingPlatformDestroy: 01

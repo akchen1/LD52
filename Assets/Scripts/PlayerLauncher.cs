@@ -51,6 +51,7 @@ public class PlayerLauncher : MonoBehaviour
 	private void Update()
 	{
 		if (state == PlayerState.Dead) return;
+		if (PauseScreen.Instance.IsPaused()) return;
 		BeginJump();
 		Travel();
 		Move();
@@ -60,19 +61,19 @@ public class PlayerLauncher : MonoBehaviour
 		//Debug.DrawRay(transform.position, child.transform.right, Color.red);
 		//Debug.DrawRay(transform.position, child.transform.up, Color.green);
 
-		CheckEnd();
+		//CheckEnd();
 	}
 
-	private void CheckEnd()
-	{
-		if (state != PlayerState.InPlatform) return;
-		EndingTrigger end = currentPlatform?.GetComponent<EndingTrigger>();
-		if (end != null)
-		{
-			StartCoroutine(EndGame());
+	//private void CheckEnd()
+	//{
+	//	if (state != PlayerState.InPlatform) return;
+	//	EndingTrigger end = currentPlatform?.GetComponentInChildren<EndingTrigger>();
+	//	if (end != null)
+	//	{
+	//		StartCoroutine(EndGame());
 
-		}
-	}
+	//	}
+	//}
 
 	public IEnumerator EndGame()
 	{
