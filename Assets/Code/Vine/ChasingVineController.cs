@@ -58,6 +58,7 @@ public class ChasingVineController : MonoBehaviour
 			{
 				chasingVineCam.IsMoving = false;
 				isChasing = false;
+				AudioSystem.Instance.PlayThemeDEnd();
 			}
 		}
 	}
@@ -79,7 +80,7 @@ public class ChasingVineController : MonoBehaviour
 		{
 			// TODO: Play audio queue
 			StartCoroutine(DelayedVineSpawn(spawnDelay));
-
+			AudioSystem.Instance.PlayThemeDLoop();
 		}
 	}
 }

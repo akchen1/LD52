@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class AreaManager : MonoBehaviour
 {
@@ -205,6 +206,11 @@ public class AreaManager : MonoBehaviour
 
 		CheckExceptions(newArea);
 		//Enable new camera and disable old one
+		if (backgroundDict[newArea] != backgroundDict[currentArea])
+        {
+            backgroundDict[currentArea]?.DeactivateParallax();
+			backgroundDict[newArea]?.EnableParallax(newArea);
+		}
 
 		if (camerasDict[newArea] != camerasDict[currentArea])
 		{
@@ -212,60 +218,51 @@ public class AreaManager : MonoBehaviour
 			camerasDict[currentArea].SetActive(false);
 		}
 
+		currentArea = newArea;
+		ChangeAreaMusic(newArea);
 
-		if (backgroundDict[newArea] != backgroundDict[currentArea])
-        {
-            backgroundDict[currentArea]?.DeactivateParallax();
-            backgroundDict[newArea]?.EnableParallax(newArea);
+	}
 
-		}
-
-		switch (newArea)
+	private void ChangeAreaMusic(int area)
+    {
+		switch (area)
 		{
 			case 0:
 			case 1:
 			case 2:
-				if (currentArea != 0 && currentArea != 1 && currentArea != 2)
-				{
-					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
-				}
+				StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeA"));
+
 				break;
 
 			case 3:
 			case 4:
-				if (currentArea != 3 && currentArea != 4)
-				{
-					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeB"));
-				}
+				StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeB"));
+
 				break;
 
 			case 5:
 			case 6:
-				if (currentArea != 5 && currentArea != 6)
-				{
-					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeC"));
-				}
+				StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeC"));
+
 				break;
 
 			case 7:
-				if (currentArea != 7)
-				{
-					AudioSystem.Instance.PlayThemeD();
-				}
-				break;
-
 			case 8:
-			case 9:
-				if (currentArea != 8 && currentArea != 9)
+				if (GetCurrentLantern().AreaCleared())
 				{
-					AudioSystem.Instance.PlayVineEnd();
 					StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeE"));
 				}
+				else
+                {
+					AudioSystem.Instance.PlayThemeDIntro();
+
+				}
+
+				break;
+			case 9:
+				StartCoroutine(AudioSystem.Instance.ChangeMusic("ThemeE"));
 				break;
 		}
-
-		currentArea = newArea;
-
 	}
 
 	public void ClearCurrentArea()
@@ -357,6 +354,14 @@ public class AreaManager : MonoBehaviour
         } else
         {
 			a0CoverBlock.enabled = false;
+        }
+
+		if ((currentArea == 7 || currentArea == 8) && GetCurrentLantern().AreaCleared())
+        {
+			CinemachineVirtualCamera cinemachineVirtualCamera = camerasDict[newArea].GetComponent<CinemachineVirtualCamera>();
+			cinemachineVirtualCamera.Follow = FindObjectOfType<PlayerLauncher>().transform;
+			if (cinemachineVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>() == null)
+				cinemachineVirtualCamera.AddCinemachineComponent<CinemachineFramingTransposer>();
         }
 	}
 }

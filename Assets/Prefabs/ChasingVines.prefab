@@ -387,6 +387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chasingVineSpawn: {fileID: 5245215689278802307}
   chasingVine: {fileID: 5245215689567302159}
-  maxX: 36
+  chasingVineCam: {fileID: 0}
+  maxX: 24
   spawnDelay: 5
   movespeed: 20

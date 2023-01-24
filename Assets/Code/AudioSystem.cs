@@ -40,6 +40,8 @@ public class AudioSystem : MonoBehaviour
 	private Dictionary<string, AudioClip> music = new Dictionary<string, AudioClip>();
 	private Dictionary<string, AudioClip> sfx = new Dictionary<string, AudioClip>();
 
+	private string currentMusic;
+
 	private void Awake()
 	{
 		if (_instance != null && _instance != this)
@@ -100,11 +102,14 @@ public class AudioSystem : MonoBehaviour
 			MusicSource.clip = music[name];
 			MusicSource.Play();
 			MusicSource.loop = true;
+
+			currentMusic = name;
 		}
 	}
 
 	public IEnumerator ChangeMusic(string name)
 	{
+		if (currentMusic == name) yield break;
 		while (MusicSource.volume > 0)
 		{
 			MusicSource.volume -= fadeSpeed * Time.deltaTime;
@@ -136,30 +141,39 @@ public class AudioSystem : MonoBehaviour
 
 	private IEnumerator PlayVineChaseLoop()
 	{
-		yield return new WaitForSeconds(music["VineChaseStart"].length);
+		yield return new WaitForSeconds(sfx["VineChaseStart"].length);
 
 		SfxSource.clip = sfx["VineChase"];
 		SfxSource.loop = true;
 		SfxSource.Play();
 	}
 
-	public void PlayThemeD()
+	public void PlayThemeDIntro()
 	{
+		if (currentMusic == "ThemeD") return;
 		MusicSource.clip = music["ThemeDIntro"];
 		MusicSource.Play();
 		MusicSource.loop = false;
-
-		StartCoroutine(PlayThemeDLoop());
+		currentMusic = "ThemeDIntro";
 	}
 
-	private IEnumerator PlayThemeDLoop()
+	public void PlayThemeDLoop()
 	{
-		yield return new WaitForSeconds(music["ThemeDIntro"].length);
+		//yield return new WaitForSeconds(music["ThemeDIntro"].length);
+		if (currentMusic == "ThemeD") return;
+		PlayVineChase();
 
 		MusicSource.clip = music["ThemeD"];
 		MusicSource.loop = true;
 		MusicSource.Play();
+		currentMusic = "ThemeD";
 	}
+
+	public void PlayThemeDEnd()
+    {
+		PlayVineEnd();
+		StartCoroutine(ChangeMusic("ThemeE"));
+    }
 
 	private void SetVolumeLevels()
     {
@@ -186,4 +200,12 @@ public class AudioSystem : MonoBehaviour
 		SfxSource.volume = SFXSlider.value;
 		PlayerPrefs.SetFloat("SFXVolume", SFXSlider.value);
 	}
+
+	public void ResetAudio()
+    {
+		currentMusic = null;
+		StopAllCoroutines();
+		SfxSource.Stop();
+		MusicSource.Stop();
+    }
 }

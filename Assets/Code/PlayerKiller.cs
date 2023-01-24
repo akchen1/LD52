@@ -32,8 +32,6 @@ public class PlayerKiller : MonoBehaviour
 		string sfx = "";
 		if (objectHit.GetComponentInParent<RopePlatform>() != null)
 		{
-			Debug.Log("Play");
-			Debug.Log(objectHit.name);
 			sfx = "WaterRockSplash";
 		} else if (objectHit.tag == "Player")
         {

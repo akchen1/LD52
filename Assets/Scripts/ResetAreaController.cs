@@ -112,11 +112,11 @@ public class ResetAreaController : MonoBehaviour
                 lantern.ResetLantern();
             }
         }
-        if (resetPlayer)
-            player.DieHard();
         DestroySouls();
         SpawnObjects(areaIndex, onlyRocks);
         areaManager.EnterArea(areaIndex);
+        if (resetPlayer)
+            player.DieHard();
     }
 
     private void DestroySouls()
@@ -134,6 +134,7 @@ public class ResetAreaController : MonoBehaviour
         {
             if (obj != null)
             {
+                obj.SetActive(false);
                 Destroy(obj);
             }
         }

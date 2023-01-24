@@ -337,6 +337,8 @@ public class PlayerLauncher : MonoBehaviour
 		{
 			FindObjectOfType<ChasingVineCam>().ResetPosition();
 			FindObjectOfType<ResetAreaController>().ResetArea(false);
+			AudioSystem.Instance.ResetAudio();
+			areaManager.EnterArea(currentArea);
 		}
 
 		yield return new WaitForSeconds(0.833f);
