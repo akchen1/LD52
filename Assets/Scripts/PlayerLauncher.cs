@@ -94,7 +94,6 @@ public class PlayerLauncher : MonoBehaviour
 		}
 
 	}
-
 	private void RotateChild()
 	{
 		if (state != PlayerState.InPlatform) return;
@@ -103,11 +102,13 @@ public class PlayerLauncher : MonoBehaviour
 		float angle = Vector2.SignedAngle(Vector2.down, normal);
 		child.transform.eulerAngles = new Vector3(0, 0, angle);
 
-
 		Vector3 childScale = child.transform.localScale;
 		childScale.x = Mathf.Sign(-moveDir.x) * Mathf.Sign(normal.y);
 
 		child.transform.localScale = childScale;
+		//Debug.DrawRay(child.transform.position, child.transform.up, Color.red, 2f);
+
+
 	}
 
 	private void SetAnimation()
@@ -144,12 +145,13 @@ public class PlayerLauncher : MonoBehaviour
 			normalScale = -1;
 		}
 
-		moveDir = directionScale * (Vector2)child.transform.right * speed;
+		moveDir = directionScale * (Vector2)child.transform.right * speed * 1.1f;
 
-		Vector2 trueDirection = moveDir + ((Vector2)child.transform.up * speed * normalScale);
+		Vector2 trueDirection = moveDir + ((Vector2)child.transform.up * speed * normalScale) * 0.5f;
+		//Debug.DrawRay(child.transform.position, moveDir.normalized, Color.green, 2f);
 
 		move += trueDirection;
-
+		//Debug.DrawRay(child.transform.position, trueDirection.normalized, Color.blue, 2f);
 		PlayerRigidbody.MovePosition(move);
 		animator.SetFloat("Horizontal", move.x);
 		animator.SetFloat("Vertical", move.y);
